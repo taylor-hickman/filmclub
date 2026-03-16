@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FeatureKey {
+  WATCHLIST
+}
+
+enum FeatureMembershipRole {
+  OWNER
+  MEMBER
+}
+
+enum WatchlistItemStatus {
+  QUEUED
+  WATCHED
+}
+
+enum WatchlistMediaType {
+  MOVIE
+  TV
+}
+
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                    String              @id @default(cuid())
+  name                  String?
+  email                 String?             @unique
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  featureInvites        FeatureInvite[]     @relation("FeatureInviteInviter")
+  featureMemberships    FeatureMembership[]
+  ownedFeatureInstances FeatureInstance[]   @relation("FeatureInstanceOwner")
+  sessions              Session[]
+  userFeatures          UserFeature[]
+  watchlistItems        WatchlistItem[]     @relation("WatchlistItemAddedBy")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model UserFeature {
+  id            String     @id @default(cuid())
+  userId        String
+  featureKey    FeatureKey
+  enabledAt     DateTime   @default(now())
+  lastVisitedAt DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, featureKey])
+  @@index([userId])
+}
+
+model FeatureInstance {
+  id          String              @id @default(cuid())
+  featureKey  FeatureKey
+  ownerId     String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  invites     FeatureInvite[]
+  memberships FeatureMembership[]
+  owner       User                @relation("FeatureInstanceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  watchlist   Watchlist?
+
+  @@index([featureKey, ownerId])
+}
+
+model FeatureMembership {
+  id                String                @id @default(cuid())
+  featureInstanceId String
+  userId            String
+  role              FeatureMembershipRole @default(MEMBER)
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  featureInstance   FeatureInstance       @relation(fields: [featureInstanceId], references: [id], onDelete: Cascade)
+  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([featureInstanceId, userId])
+  @@index([userId])
+}
+
+model FeatureInvite {
+  id                String          @id @default(cuid())
+  featureInstanceId String
+  featureKey        FeatureKey
+  inviterId         String
+  email             String
+  tokenHash         String          @unique
+  expiresAt         DateTime
+  acceptedAt        DateTime?
+  revokedAt         DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  featureInstance   FeatureInstance @relation(fields: [featureInstanceId], references: [id], onDelete: Cascade)
+  inviter           User            @relation("FeatureInviteInviter", fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([featureInstanceId, email])
+  @@index([email])
+  @@index([featureKey])
+}
+
+model Watchlist {
+  id                String             @id @default(cuid())
+  featureInstanceId String             @unique
+  name              String
+  description       String?
+  mediaType         WatchlistMediaType
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  featureInstance   FeatureInstance    @relation(fields: [featureInstanceId], references: [id], onDelete: Cascade)
+  items             WatchlistItem[]
+}
+
+model WatchlistItem {
+  id           String              @id @default(cuid())
+  watchlistId  String
+  tmdbId       Int
+  position     Int
+  status       WatchlistItemStatus @default(QUEUED)
+  note         String              @default("")
+  title        String
+  creditNames  String?
+  year         Int?
+  posterPath   String?
+  backdropPath String?
+  overview     String?
+  watchedAt    DateTime?
+  addedById    String
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  addedBy      User                @relation("WatchlistItemAddedBy", fields: [addedById], references: [id], onDelete: Restrict)
+  watchlist    Watchlist           @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistId, tmdbId])
+  @@index([watchlistId, position])
+  @@index([addedById])
+}

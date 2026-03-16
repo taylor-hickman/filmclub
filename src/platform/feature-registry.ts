@@ -1,0 +1,42 @@
+export const featureKeys = ["WATCHLIST"] as const;
+
+export type FeatureKeyValue = (typeof featureKeys)[number];
+
+export type FeatureDefinition = {
+  key: FeatureKeyValue;
+  slug: string;
+  name: string;
+  shortName: string;
+  summary: string;
+  detail: string;
+  href: string;
+  badge: string;
+  ctaLabel: string;
+};
+
+export const featureRegistry = {
+  WATCHLIST: {
+    key: "WATCHLIST",
+    slug: "watchlists",
+    name: "Watchlists",
+    shortName: "Watchlists",
+    summary: "Private movie and TV queues with live TMDB search.",
+    detail:
+      "Create shared movie or TV watchlists, invite collaborators, and keep notes, order, and watched status in sync.",
+    href: "/app/watchlists",
+    badge: "Available now",
+    ctaLabel: "Open Watchlists",
+  },
+} satisfies Record<FeatureKeyValue, FeatureDefinition>;
+
+export const orderedFeatureDefinitions = featureKeys.map(
+  (featureKey) => featureRegistry[featureKey],
+);
+
+export function getFeatureDefinition(featureKey: FeatureKeyValue) {
+  return featureRegistry[featureKey];
+}
+
+export function getFeatureDefinitionBySlug(slug: string) {
+  return orderedFeatureDefinitions.find((feature) => feature.slug === slug);
+}
