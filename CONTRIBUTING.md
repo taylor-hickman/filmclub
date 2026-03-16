@@ -61,6 +61,8 @@ npm run dev:vercel
 ```
 
 The default local database name in `.env.example` is `filmclub`.
+Use `DIRECT_URL` for Prisma CLI commands when your hosted runtime uses a pooled
+`DATABASE_URL`.
 
 ## Schema Changes
 
