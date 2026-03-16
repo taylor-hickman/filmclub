@@ -46,6 +46,7 @@ This repo deploys from GitHub to Vercel. Future agent work must keep Git history
   - `AUTH_GOOGLE_ID=ci-google-id`
   - `AUTH_GOOGLE_SECRET=ci-google-secret`
   - `DATABASE_URL=postgresql://postgres:password@127.0.0.1:5432/filmclub`
+  - `DIRECT_URL=postgresql://postgres:password@127.0.0.1:5432/filmclub`
   - `NEXT_PUBLIC_APP_NAME=FilmClub`
   - `RESEND_API_KEY=ci-resend-key`
   - `RESEND_FROM_EMAIL=filmclub@example.com`

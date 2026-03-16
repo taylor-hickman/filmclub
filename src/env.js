@@ -17,6 +17,7 @@ export const env = createEnv({
     RESEND_API_KEY: optionalOutsideProduction(),
     RESEND_FROM_EMAIL: optionalOutsideProduction(),
     DATABASE_URL: z.string().url(),
+    DIRECT_URL: optionalOutsideProduction(),
     TMDB_API_KEY: optionalOutsideProduction(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -32,6 +33,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
     DATABASE_URL: process.env.DATABASE_URL,
+    DIRECT_URL: process.env.DIRECT_URL,
     TMDB_API_KEY: process.env.TMDB_API_KEY,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,

@@ -52,6 +52,7 @@ Required secrets for the full app flow:
 - `RESEND_FROM_EMAIL`
 - `TMDB_API_KEY`
 - `DATABASE_URL`
+- `DIRECT_URL`
 
 Optional: pull shared Vercel env vars for local development:
 
@@ -92,6 +93,15 @@ npm run build
 `npm run build` requires production-style env vars. During verification, stub
 values are enough for Google, Resend, and TMDB because the build only needs
 schema-valid configuration.
+
+## Database connection setup
+
+- `DATABASE_URL` should be the pooled runtime connection string in hosted
+  environments such as Vercel.
+- `DIRECT_URL` should be the direct PostgreSQL connection string used by Prisma
+  CLI commands such as `prisma migrate deploy`.
+- For Supabase, that means `DATABASE_URL` should use the Supavisor pooler and
+  `DIRECT_URL` should use the direct `db.<project-ref>.supabase.co:5432` host.
 
 ## Product scope
 
