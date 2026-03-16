@@ -1,0 +1,3 @@
+-- No-op migration.
+-- This change adds Prisma directUrl configuration for CLI/migration
+-- connections without changing the database schema.
