@@ -7,8 +7,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
   title: "FilmClub",
-  description:
-    "FilmClub is a shared home for movie-night tools, starting with collaborative watchlists.",
+  description: "FilmClub",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

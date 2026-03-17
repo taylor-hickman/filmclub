@@ -15,29 +15,24 @@ export default async function FilmClubAppLayout({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6">
-      <header className="mb-10 rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-sm">
+      <header className="mb-10 border-b border-white/[0.08] bg-transparent pb-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-1">
-            <Link href="/app" className="font-display text-4xl text-white">
-              FilmClub
-            </Link>
-            <p className="text-sm text-slate-400">
-              A shared home for movie-night tools.
-            </p>
-          </div>
+          <Link href="/app" className="font-display text-4xl text-white">
+            FilmClub
+          </Link>
 
-          <nav className="flex flex-wrap gap-3 text-sm text-slate-300">
+          <nav className="flex flex-wrap gap-3 text-sm text-stone-500">
             <Link
               href="/app"
-              className="rounded-full border border-white/10 px-4 py-2 transition hover:border-white/25 hover:text-white"
+              className="px-4 py-2 transition hover:text-white"
             >
-              Hub
+              Home
             </Link>
             {orderedFeatureDefinitions.map((feature) => (
               <Link
                 key={feature.key}
                 href={feature.href}
-                className="rounded-full border border-white/10 px-4 py-2 transition hover:border-white/25 hover:text-white"
+                className="px-4 py-2 transition hover:text-white"
               >
                 {feature.shortName}
               </Link>
@@ -45,7 +40,7 @@ export default async function FilmClubAppLayout({
           </nav>
 
           <div className="flex flex-wrap items-center gap-3 text-sm">
-            <span className="text-slate-400">
+            <span className="text-stone-400">
               {session.user.name ?? session.user.email}
             </span>
             <form
@@ -56,7 +51,7 @@ export default async function FilmClubAppLayout({
             >
               <button
                 type="submit"
-                className="rounded-full bg-amber-200 px-4 py-2 font-medium text-slate-950 transition hover:bg-amber-100"
+                className="rounded-full bg-white/10 px-4 py-2 font-medium text-stone-300 transition hover:bg-white/15"
               >
                 Sign out
               </button>

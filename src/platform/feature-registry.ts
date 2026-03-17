@@ -20,12 +20,12 @@ export const featureRegistry = {
     slug: "watchlists",
     name: "Watchlists",
     shortName: "Watchlists",
-    summary: "Private movie and TV queues with live TMDB search.",
+    summary: "Collaborative watchlists.",
     detail:
-      "Create shared movie or TV watchlists, invite collaborators, and keep notes, order, and watched status in sync.",
+      "Build and share movie queues with your group.",
     href: "/app/watchlists",
-    badge: "Available now",
-    ctaLabel: "Open Watchlists",
+    badge: "Watchlists",
+    ctaLabel: "Open",
   },
 } satisfies Record<FeatureKeyValue, FeatureDefinition>;
 

@@ -13,9 +13,7 @@ import {
   getNoResultsLabel,
   getSearchEmptyLabel,
   getSearchPlaceholder,
-  getWaitingForFirstTitleLabel,
   getWatchlistBadgeLabel,
-  getYearPrefix,
   type WatchlistMediaTypeValue,
 } from "~/features/watchlists/lib/watchlist-media";
 import { api } from "~/trpc/react";
@@ -228,19 +226,8 @@ export function WatchlistDetailClient({
           >
             <div className="flex h-full flex-col justify-between gap-8 p-6 sm:p-8">
               <div className="flex flex-wrap items-center gap-3 text-sm text-stone-300">
-                <span className="rounded-full border border-white/15 bg-black/20 px-3 py-1 tracking-[0.18em] uppercase">
-                  {watchlist.viewerRole === "OWNER"
-                    ? "Owner view"
-                    : "Member view"}
-                </span>
                 <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-stone-200">
                   {getWatchlistBadgeLabel(mediaType)}
-                </span>
-                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-stone-200">
-                  {watchlist.items.length} titles
-                </span>
-                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-stone-200">
-                  {watchlist.members.length} members
                 </span>
               </div>
 
@@ -250,70 +237,23 @@ export function WatchlistDetailClient({
                     <h1 className="max-w-3xl text-3xl font-semibold text-white sm:text-4xl">
                       {watchlist.name}
                     </h1>
-                    <p className="mt-3 max-w-2xl text-stone-200">
-                      {watchlist.description ??
-                        "Build the queue together. Add titles, move them around, and keep shared notes in one place."}
-                    </p>
+                    {watchlist.description ? (
+                      <p className="mt-3 max-w-2xl text-stone-200">
+                        {watchlist.description}
+                      </p>
+                    ) : null}
                   </div>
 
-                  <div className="text-sm text-stone-200">
-                    <span className="text-stone-400">Lead artwork:</span>{" "}
-                    {leadItem?.title ?? getWaitingForFirstTitleLabel(mediaType)}
-                  </div>
                 </div>
 
-                {leadItem ? (
-                  <div className="grid grid-cols-[88px_1fr] gap-4 rounded-[1.5rem] border border-white/10 bg-black/25 p-4 backdrop-blur-sm">
-                    <TmdbPoster
-                      title={leadItem.title}
-                      posterPath={leadItem.posterPath}
-                      backdropPath={leadItem.backdropPath}
-                      size="thumb"
-                      className="aspect-[2/3] rounded-[1rem]"
-                    />
-                    <div className="space-y-2">
-                      <p className="text-xs tracking-[0.22em] text-stone-400 uppercase">
-                        Queue spotlight
-                      </p>
-                      <h2 className="text-lg font-semibold text-white">
-                        {leadItem.title}
-                      </h2>
-                      <CreditLine
-                        creditNames={leadItem.creditNames}
-                        mediaType={mediaType}
-                        className="text-sm text-stone-200"
-                      />
-                      {leadItem.year ? (
-                        <p className="text-sm text-stone-300">
-                          {getYearPrefix(mediaType)} {leadItem.year}
-                        </p>
-                      ) : null}
-                      {leadItem.overview ? (
-                        <p className="text-sm text-stone-200">
-                          {leadItem.overview}
-                        </p>
-                      ) : (
-                        <p className="text-sm text-stone-400">
-                          No overview available yet.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ) : null}
               </div>
             </div>
           </TmdbBackdrop>
 
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">
-                {getAddMediaHeading(mediaType)}
-              </h2>
-              <p className="text-sm text-stone-400">
-                Search TMDB live as you type, then add posters straight into the
-                shared queue.
-              </p>
-            </div>
+            <h2 className="text-xl font-semibold text-white">
+              {getAddMediaHeading(mediaType)}
+            </h2>
 
             <div className="mt-5">
               <div className="relative">
@@ -467,11 +407,6 @@ export function WatchlistDetailClient({
                 ) : null}
               </div>
 
-              {!searchReady ? (
-                <p className="mt-4 text-sm text-stone-500">
-                  Start with at least two characters to search TMDB.
-                </p>
-              ) : null}
             </div>
 
             <div className="mt-6 space-y-4">
@@ -569,13 +504,7 @@ export function WatchlistDetailClient({
           </section>
 
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">Queue</h2>
-              <p className="text-sm text-stone-400">
-                Reorder with the arrow controls, mark titles watched, and keep
-                one shared note per title.
-              </p>
-            </div>
+            <h2 className="text-xl font-semibold text-white">Queue</h2>
 
             {watchlist.items.length === 0 ? (
               <div className="mt-5 rounded-[1.75rem] border border-dashed border-white/10 bg-stone-950/60 p-5 text-stone-400">
@@ -749,13 +678,7 @@ export function WatchlistDetailClient({
 
         <aside className="space-y-8">
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">Settings</h2>
-              <p className="text-sm text-stone-400">
-                Owners can rename or delete the watchlist. Members can only view
-                this section.
-              </p>
-            </div>
+            <h2 className="text-xl font-semibold text-white">Settings</h2>
 
             {watchlist.canManage ? (
               <form
@@ -829,15 +752,9 @@ export function WatchlistDetailClient({
           </section>
 
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">
-                Collaborators
-              </h2>
-              <p className="text-sm text-stone-400">
-                The owner handles invites and removals. Everyone on the list can
-                edit items.
-              </p>
-            </div>
+            <h2 className="text-xl font-semibold text-white">
+              Collaborators
+            </h2>
 
             {watchlist.canManage ? (
               <form

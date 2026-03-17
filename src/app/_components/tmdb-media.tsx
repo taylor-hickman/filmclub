@@ -90,7 +90,7 @@ export function TmdbBackdrop({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] bg-[linear-gradient(160deg,_rgba(28,25,23,0.96)_0%,_rgba(17,24,39,0.96)_100%)]",
+        "relative overflow-hidden rounded-[1.75rem] bg-[linear-gradient(160deg,_rgba(10,10,10,0.96)_0%,_rgba(10,10,10,0.96)_100%)]",
         className,
       )}
     >

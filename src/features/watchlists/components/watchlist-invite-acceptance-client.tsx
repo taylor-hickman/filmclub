@@ -24,7 +24,7 @@ export function WatchlistInviteAcceptanceClient({
 
   if (inviteQuery.isLoading) {
     return (
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-slate-300">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-stone-300">
         Loading invite...
       </div>
     );
@@ -45,25 +45,21 @@ export function WatchlistInviteAcceptanceClient({
   return (
     <section className="mx-auto max-w-2xl space-y-6 rounded-3xl border border-white/10 bg-white/5 p-8">
       <div className="space-y-2">
-        <p className="text-sm tracking-[0.22em] text-slate-500 uppercase">
-          Join FilmClub
+        <p className="text-sm tracking-[0.22em] text-stone-500 uppercase">
+          Invitation
         </p>
         <h1 className="font-display text-4xl text-white">
           {watchlist?.name ?? invite.feature.name}
         </h1>
         {watchlist?.description ? (
-          <p className="text-slate-300">{watchlist.description}</p>
+          <p className="text-stone-300">{watchlist.description}</p>
         ) : (
-          <p className="text-slate-300">{invite.feature.detail}</p>
+          <p className="text-stone-300">{invite.feature.detail}</p>
         )}
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-slate-950/80 p-5 text-sm text-slate-300">
+      <div className="rounded-2xl border border-white/10 bg-stone-950/80 p-5 text-sm text-stone-300">
         <p>
-          Feature:{" "}
-          <span className="font-medium text-white">{invite.feature.name}</span>
-        </p>
-        <p className="mt-2">
           Invited email:{" "}
           <span className="font-medium text-white">{invite.email}</span>
         </p>
@@ -73,13 +69,13 @@ export function WatchlistInviteAcceptanceClient({
             {invite.inviter.name ?? invite.inviter.email}
           </span>
         </p>
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-stone-500">
           Expires {new Date(invite.expiresAt).toLocaleString()}
         </p>
       </div>
 
       {!invite.isActive ? (
-        <div className="rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-amber-100">
+        <div className="rounded-2xl border border-stone-400/20 bg-stone-500/10 p-5 text-stone-300">
           This invite is no longer active. It may have expired, been revoked, or
           already been used.
         </div>
@@ -87,14 +83,14 @@ export function WatchlistInviteAcceptanceClient({
 
       {!viewerEmail ? (
         <div className="space-y-4">
-          <p className="text-slate-300">
+          <p className="text-stone-300">
             Sign in with{" "}
             <span className="font-medium text-white">{invite.email}</span> to
             accept this invite.
           </p>
           <Link
             href={`/api/auth/signin?callbackUrl=${callbackUrl}`}
-            className="inline-flex rounded-full bg-amber-200 px-5 py-3 font-medium text-slate-950 transition hover:bg-amber-100"
+            className="inline-flex rounded-full bg-white px-5 py-3 font-medium text-stone-900 transition hover:bg-stone-200"
           >
             Sign in to accept
           </Link>
@@ -103,7 +99,7 @@ export function WatchlistInviteAcceptanceClient({
 
       {viewerEmail &&
       viewerEmail.toLowerCase() !== invite.email.toLowerCase() ? (
-        <div className="rounded-2xl border border-amber-400/20 bg-amber-500/10 p-5 text-amber-100">
+        <div className="rounded-2xl border border-stone-400/20 bg-stone-500/10 p-5 text-stone-300">
           You are signed in as {viewerEmail}, but this invite was sent to{" "}
           {invite.email}. Switch accounts and try again.
         </div>
@@ -116,7 +112,7 @@ export function WatchlistInviteAcceptanceClient({
             type="button"
             onClick={() => acceptInvite.mutate({ token })}
             disabled={acceptInvite.isPending}
-            className="rounded-full bg-amber-200 px-5 py-3 font-medium text-slate-950 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full bg-white px-5 py-3 font-medium text-stone-900 transition hover:bg-stone-200 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {acceptInvite.isPending ? "Accepting..." : "Accept invite"}
           </button>
