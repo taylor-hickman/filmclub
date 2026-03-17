@@ -1061,9 +1061,7 @@ export function WatchlistDetailClient({
                                   <path d="m18 15-6-6-6 6" />
                                 </svg>
                                 <span className="text-xs font-medium">
-                                  {item.viewerWeight !== null
-                                    ? item.viewerWeight
-                                    : "Vote"}
+                                  {item.viewerWeight ?? "Vote"}
                                 </span>
                               </span>
                             </button>
