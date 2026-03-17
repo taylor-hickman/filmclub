@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { TmdbBackdrop, TmdbPoster } from "~/app/_components/tmdb-media";
 import {
@@ -53,6 +53,19 @@ export function WatchlistDetailClient({
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+  const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
+
+  const showFeedback = useCallback((key: string, message: string) => {
+    setFeedbackMap((prev) => ({ ...prev, [key]: message }));
+    setTimeout(() => {
+      setFeedbackMap((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+    }, 1500);
+  }, []);
 
   const watchlistQuery = api.watchlists.get.useQuery({ watchlistId });
   const watchlist = watchlistQuery.data;
@@ -118,6 +131,7 @@ export function WatchlistDetailClient({
   const inviteMember = api.members.invite.useMutation({
     onSuccess: async () => {
       setInviteEmail("");
+      showFeedback("invite", "Invited");
       await invalidateWatchlist();
     },
   });
@@ -162,6 +176,8 @@ export function WatchlistDetailClient({
   const isSearchPending =
     (searchReady && trimmedSearchInput !== searchQuery) ||
     mediaSearchQuery.isFetching;
+
+  const hasBackdrop = !!(leadItem?.backdropPath || leadItem?.posterPath);
 
   const moveItem = (itemId: string, direction: "up" | "down") => {
     const currentIndex = orderedItemIds.indexOf(itemId);
@@ -217,46 +233,41 @@ export function WatchlistDetailClient({
 
       <section className="grid gap-8 xl:grid-cols-[1.3fr_0.7fr]">
         <div className="space-y-8">
+          {/* Hero — compact when no backdrop image */}
           <TmdbBackdrop
             title={watchlist.name}
             backdropPath={leadItem?.backdropPath ?? null}
             posterPath={leadItem?.posterPath ?? null}
             priority
-            className="border border-white/10"
+            className={`border border-white/10 ${hasBackdrop ? "min-h-[16rem]" : ""}`}
           >
-            <div className="flex h-full flex-col justify-between gap-8 p-6 sm:p-8">
+            <div
+              className={`flex h-full flex-col justify-end ${hasBackdrop ? "gap-8 p-6 sm:p-8" : "gap-4 p-4 sm:p-5"}`}
+            >
               <div className="flex flex-wrap items-center gap-3 text-sm text-stone-300">
                 <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-stone-200">
                   {getWatchlistBadgeLabel(mediaType)}
                 </span>
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-                <div className="space-y-4">
-                  <div>
-                    <h1 className="max-w-3xl text-3xl font-semibold text-white sm:text-4xl">
-                      {watchlist.name}
-                    </h1>
-                    {watchlist.description ? (
-                      <p className="mt-3 max-w-2xl text-stone-200">
-                        {watchlist.description}
-                      </p>
-                    ) : null}
-                  </div>
-
-                </div>
-
+              <div>
+                <h1 className="max-w-3xl text-3xl font-semibold text-white sm:text-4xl">
+                  {watchlist.name}
+                </h1>
+                {watchlist.description ? (
+                  <p className="mt-3 max-w-2xl text-stone-200">
+                    {watchlist.description}
+                  </p>
+                ) : null}
               </div>
             </div>
           </TmdbBackdrop>
 
+          {/* Queue section with integrated search */}
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-xl font-semibold text-white">
-              {getAddMediaHeading(mediaType)}
-            </h2>
-
-            <div className="mt-5">
-              <div className="relative">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-xl font-semibold text-white">Queue</h2>
+              <div className="relative flex-1 sm:max-w-sm">
                 <div className="relative flex items-center">
                   <input
                     value={searchInput}
@@ -296,7 +307,7 @@ export function WatchlistDetailClient({
                         setSearchFocused(false);
                       }
                     }}
-                    className="w-full rounded-[1.5rem] border border-white/10 bg-stone-950 px-4 py-4 pr-28 text-white transition outline-none focus:border-white/30"
+                    className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 pr-20 text-sm text-white transition outline-none focus:border-white/30"
                     placeholder={getSearchPlaceholder(mediaType)}
                   />
 
@@ -308,7 +319,7 @@ export function WatchlistDetailClient({
                         setSearchQuery("");
                         setSearchFocused(false);
                       }}
-                      className="absolute right-4 rounded-full border border-white/10 px-3 py-1 text-xs tracking-[0.18em] text-stone-300 uppercase transition hover:border-white/25 hover:text-white"
+                      className="absolute right-3 rounded-full border border-white/10 px-2 py-0.5 text-xs text-stone-400 transition hover:border-white/25 hover:text-white"
                     >
                       Clear
                     </button>
@@ -318,7 +329,7 @@ export function WatchlistDetailClient({
                 {dropdownOpen ? (
                   <div
                     onMouseDown={(event) => event.preventDefault()}
-                    className="absolute inset-x-0 top-[calc(100%+0.75rem)] z-20 overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-950/95 shadow-2xl shadow-black/40 backdrop-blur"
+                    className="absolute inset-x-0 top-[calc(100%+0.5rem)] z-20 overflow-hidden rounded-2xl border border-white/10 bg-stone-950/95 shadow-2xl shadow-black/40 backdrop-blur"
                   >
                     {isSearchPending ? (
                       <div className="px-4 py-4 text-sm text-stone-400">
@@ -342,7 +353,7 @@ export function WatchlistDetailClient({
                           return (
                             <div
                               key={result.tmdbId}
-                              className={`grid grid-cols-[56px_1fr_auto] items-center gap-3 rounded-[1.2rem] px-3 py-3 transition ${
+                              className={`grid grid-cols-[56px_1fr_auto] items-center gap-3 rounded-xl px-3 py-3 transition ${
                                 index === activeSuggestionIndex
                                   ? "bg-white/10"
                                   : "hover:bg-white/5"
@@ -353,7 +364,7 @@ export function WatchlistDetailClient({
                                 posterPath={result.posterPath}
                                 backdropPath={result.backdropPath}
                                 size="thumb"
-                                className="aspect-[2/3] rounded-[0.9rem]"
+                                className="aspect-[2/3] rounded-lg"
                               />
 
                               <div className="min-w-0">
@@ -372,9 +383,6 @@ export function WatchlistDetailClient({
                                   mediaType={mediaType}
                                   className="truncate text-sm text-stone-300"
                                 />
-                                <p className="text-sm text-stone-400">
-                                  {result.overview || "No overview available."}
-                                </p>
                               </div>
 
                               <button
@@ -406,108 +414,105 @@ export function WatchlistDetailClient({
                   </div>
                 ) : null}
               </div>
-
             </div>
 
-            <div className="mt-6 space-y-4">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold tracking-[0.2em] text-stone-500 uppercase">
-                  Search results
-                </h3>
-                {searchReady ? (
+            {/* Search results — only visible when actively searching */}
+            {searchReady ? (
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-sm font-semibold tracking-[0.2em] text-stone-500 uppercase">
+                    Search results
+                  </h3>
                   <p className="text-sm text-stone-500">
                     {isSearchPending
-                      ? "Refreshing artwork..."
+                      ? "Searching..."
                       : `${searchResults.length} results`}
                   </p>
-                ) : null}
-              </div>
-
-              {searchReady && !isSearchPending && searchResults.length === 0 ? (
-                <div className="rounded-[1.75rem] border border-dashed border-white/10 bg-stone-950/60 p-5 text-stone-400">
-                  {getNoResultsLabel(mediaType)}
                 </div>
-              ) : null}
 
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {searchResults.map((result) => {
-                  const alreadyAdded = existingTmdbIds.has(result.tmdbId);
+                {!isSearchPending && searchResults.length === 0 ? (
+                  <div className="rounded-2xl border border-dashed border-white/10 bg-stone-950/60 p-5 text-stone-400">
+                    {getNoResultsLabel(mediaType)}
+                  </div>
+                ) : null}
 
-                  return (
-                    <div
-                      key={result.tmdbId}
-                      className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-stone-950/80"
-                    >
-                      <TmdbPoster
-                        title={result.title}
-                        posterPath={result.posterPath}
-                        backdropPath={result.backdropPath}
-                        className="aspect-[2/3] rounded-none"
-                      />
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {searchResults.map((result) => {
+                    const alreadyAdded = existingTmdbIds.has(result.tmdbId);
 
-                      <div className="space-y-4 p-4">
-                        <div className="space-y-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="text-lg font-semibold text-white">
-                              {result.title}
-                            </h3>
-                            {result.year ? (
-                              <span className="text-sm text-stone-500">
-                                {result.year}
-                              </span>
-                            ) : null}
+                    return (
+                      <div
+                        key={result.tmdbId}
+                        className="overflow-hidden rounded-2xl border border-white/10 bg-stone-950/80"
+                      >
+                        <TmdbPoster
+                          title={result.title}
+                          posterPath={result.posterPath}
+                          backdropPath={result.backdropPath}
+                          className="aspect-[2/3] rounded-none"
+                        />
+
+                        <div className="space-y-4 p-4">
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h3 className="text-lg font-semibold text-white">
+                                {result.title}
+                              </h3>
+                              {result.year ? (
+                                <span className="text-sm text-stone-500">
+                                  {result.year}
+                                </span>
+                              ) : null}
+                            </div>
+                            <CreditLine
+                              creditNames={result.creditNames}
+                              mediaType={mediaType}
+                              className="text-sm text-stone-300"
+                            />
                           </div>
-                          <CreditLine
-                            creditNames={result.creditNames}
-                            mediaType={mediaType}
-                            className="text-sm text-stone-300"
-                          />
+
+                          <p className="min-h-24 text-sm text-stone-400">
+                            {result.overview || "No overview available."}
+                          </p>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              addItem.mutate({
+                                watchlistId,
+                                tmdbId: result.tmdbId,
+                              })
+                            }
+                            disabled={alreadyAdded || addItem.isPending}
+                            className={`w-full rounded-full px-4 py-3 text-sm font-medium transition ${
+                              alreadyAdded
+                                ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-100"
+                                : "bg-white text-stone-900 hover:bg-stone-200"
+                            } disabled:cursor-not-allowed disabled:opacity-70`}
+                          >
+                            {alreadyAdded
+                              ? "Already on this list"
+                              : addItem.isPending
+                                ? "Adding..."
+                                : "Add to queue"}
+                          </button>
                         </div>
-
-                        <p className="min-h-24 text-sm text-stone-400">
-                          {result.overview || "No overview available."}
-                        </p>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            addItem.mutate({
-                              watchlistId,
-                              tmdbId: result.tmdbId,
-                            })
-                          }
-                          disabled={alreadyAdded || addItem.isPending}
-                          className={`w-full rounded-full px-4 py-3 text-sm font-medium transition ${
-                            alreadyAdded
-                              ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-100"
-                              : "bg-white text-stone-900 hover:bg-stone-200"
-                          } disabled:cursor-not-allowed disabled:opacity-70`}
-                        >
-                          {alreadyAdded
-                            ? "Already on this list"
-                            : addItem.isPending
-                              ? "Adding..."
-                              : "Add to queue"}
-                        </button>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            ) : null}
 
             {addItem.error ? (
               <p className="mt-4 text-sm text-rose-300">
                 {addItem.error.message}
               </p>
             ) : null}
-          </section>
 
-          <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-xl font-semibold text-white">Queue</h2>
-
+            {/* Queue items */}
             {watchlist.items.length === 0 ? (
-              <div className="mt-5 rounded-[1.75rem] border border-dashed border-white/10 bg-stone-950/60 p-5 text-stone-400">
+              <div className="mt-5 rounded-2xl border border-dashed border-white/10 bg-stone-950/60 p-5 text-stone-400">
                 {getEmptyQueueLabel(mediaType)}
               </div>
             ) : null}
@@ -516,7 +521,7 @@ export function WatchlistDetailClient({
               {watchlist.items.map((item, index) => (
                 <div
                   key={item.id}
-                  className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-stone-950/85"
+                  className="overflow-hidden rounded-2xl border border-white/10 bg-stone-950/85"
                 >
                   <div className="grid gap-5 p-4 lg:grid-cols-[210px_1fr] lg:p-5">
                     <TmdbPoster
@@ -568,14 +573,15 @@ export function WatchlistDetailClient({
                           </p>
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <button
                             type="button"
                             onClick={() => moveItem(item.id, "up")}
                             disabled={index === 0 || reorderItems.isPending}
-                            className="rounded-full border border-white/15 px-3 py-2 text-sm transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+                            aria-label="Move up"
+                            className="rounded-full border border-white/15 px-2.5 py-2 text-base transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            Move up
+                            ↑
                           </button>
                           <button
                             type="button"
@@ -584,21 +590,31 @@ export function WatchlistDetailClient({
                               index === watchlist.items.length - 1 ||
                               reorderItems.isPending
                             }
-                            className="rounded-full border border-white/15 px-3 py-2 text-sm transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+                            aria-label="Move down"
+                            className="rounded-full border border-white/15 px-2.5 py-2 text-base transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            Move down
+                            ↓
                           </button>
                           <button
                             type="button"
                             onClick={() =>
-                              updateItem.mutate({
-                                itemId: item.id,
-                                status:
-                                  item.status === "WATCHED"
-                                    ? "QUEUED"
-                                    : "WATCHED",
-                                note: noteDrafts[item.id] ?? item.note,
-                              })
+                              updateItem
+                                .mutateAsync({
+                                  itemId: item.id,
+                                  status:
+                                    item.status === "WATCHED"
+                                      ? "QUEUED"
+                                      : "WATCHED",
+                                  note: noteDrafts[item.id] ?? item.note,
+                                })
+                                .then(() => {
+                                  showFeedback(
+                                    `watched-${item.id}`,
+                                    item.status === "WATCHED"
+                                      ? "Queued"
+                                      : "Done",
+                                  );
+                                })
                             }
                             className="rounded-full border border-white/15 px-3 py-2 text-sm transition hover:border-white/30"
                           >
@@ -606,6 +622,11 @@ export function WatchlistDetailClient({
                               ? "Move to queue"
                               : "Mark watched"}
                           </button>
+                          {feedbackMap[`watched-${item.id}`] ? (
+                            <span className="text-xs text-emerald-400">
+                              {feedbackMap[`watched-${item.id}`]}
+                            </span>
+                          ) : null}
                           <button
                             type="button"
                             onClick={() =>
@@ -618,40 +639,106 @@ export function WatchlistDetailClient({
                         </div>
                       </div>
 
-                      <div className="space-y-3">
-                        <textarea
-                          value={noteDrafts[item.id] ?? ""}
-                          onChange={(event) =>
-                            setNoteDrafts((current) => ({
-                              ...current,
-                              [item.id]: event.target.value,
-                            }))
-                          }
-                          className="min-h-28 w-full rounded-[1.25rem] border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
-                          placeholder="Shared note for this title..."
-                        />
-                        <div className="flex flex-wrap items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              updateItem.mutate({
-                                itemId: item.id,
-                                note: noteDrafts[item.id] ?? "",
-                                status: item.status,
-                              })
+                      {/* Collapsible notes */}
+                      {expandedNotes.has(item.id) ? (
+                        <div className="space-y-3">
+                          <textarea
+                            value={noteDrafts[item.id] ?? ""}
+                            onChange={(event) =>
+                              setNoteDrafts((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))
                             }
-                            className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
-                          >
-                            Save note
-                          </button>
+                            className="min-h-28 w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                            placeholder="Shared note for this title..."
+                          />
+                          <div className="flex flex-wrap items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateItem
+                                  .mutateAsync({
+                                    itemId: item.id,
+                                    note: noteDrafts[item.id] ?? "",
+                                    status: item.status,
+                                  })
+                                  .then(() => {
+                                    setExpandedNotes((prev) => {
+                                      const next = new Set(prev);
+                                      next.delete(item.id);
+                                      return next;
+                                    });
+                                    showFeedback(
+                                      `note-${item.id}`,
+                                      "Saved",
+                                    );
+                                  })
+                              }
+                              className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
+                            >
+                              Save note
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setExpandedNotes((prev) => {
+                                  const next = new Set(prev);
+                                  next.delete(item.id);
+                                  return next;
+                                })
+                              }
+                              className="text-sm text-stone-400 transition hover:text-white"
+                            >
+                              Cancel
+                            </button>
+                            {feedbackMap[`note-${item.id}`] ? (
+                              <span className="text-xs text-emerald-400">
+                                {feedbackMap[`note-${item.id}`]}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {item.note ? (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setExpandedNotes((prev) =>
+                                  new Set(prev).add(item.id),
+                                )
+                              }
+                              className="max-w-3xl text-left text-sm text-stone-300 transition hover:text-white line-clamp-2"
+                            >
+                              {item.note}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setExpandedNotes((prev) =>
+                                  new Set(prev).add(item.id),
+                                )
+                              }
+                              className="text-sm text-stone-500 transition hover:text-stone-300"
+                            >
+                              Add note
+                            </button>
+                          )}
+                          {feedbackMap[`note-${item.id}`] ? (
+                            <span className="ml-2 text-xs text-emerald-400">
+                              {feedbackMap[`note-${item.id}`]}
+                            </span>
+                          ) : null}
                           {item.watchedAt ? (
-                            <span className="text-xs tracking-wide text-stone-500 uppercase">
+                            <span className="ml-3 text-xs tracking-wide text-stone-500 uppercase">
                               Watched{" "}
                               {new Date(item.watchedAt).toLocaleDateString()}
                             </span>
                           ) : null}
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -681,58 +768,70 @@ export function WatchlistDetailClient({
             <h2 className="text-xl font-semibold text-white">Settings</h2>
 
             {watchlist.canManage ? (
-              <form
-                className="mt-5 space-y-4"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  updateWatchlist.mutate({
-                    watchlistId,
-                    name: draftName,
-                    description: draftDescription || undefined,
-                  });
-                }}
-              >
-                <label className="block space-y-2">
-                  <span className="text-sm text-stone-300">Name</span>
-                  <input
-                    required
-                    value={draftName}
-                    onChange={(event) => setDraftName(event.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
-                  />
-                </label>
+              <>
+                <form
+                  className="mt-5 space-y-4"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    updateWatchlist
+                      .mutateAsync({
+                        watchlistId,
+                        name: draftName,
+                        description: draftDescription || undefined,
+                      })
+                      .then(() => showFeedback("settings", "Saved"));
+                  }}
+                >
+                  <label className="block space-y-2">
+                    <span className="text-sm text-stone-300">Name</span>
+                    <input
+                      required
+                      value={draftName}
+                      onChange={(event) => setDraftName(event.target.value)}
+                      className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                    />
+                  </label>
 
-                <label className="block space-y-2">
-                  <span className="text-sm text-stone-300">Description</span>
-                  <textarea
-                    value={draftDescription}
-                    onChange={(event) =>
-                      setDraftDescription(event.target.value)
-                    }
-                    className="min-h-24 w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
-                  />
-                </label>
-
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    type="submit"
-                    className="rounded-full bg-white px-4 py-2 font-medium text-stone-900 transition hover:bg-stone-200"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (window.confirm("Delete this watchlist?")) {
-                        deleteWatchlist.mutate({ watchlistId });
+                  <label className="block space-y-2">
+                    <span className="text-sm text-stone-300">Description</span>
+                    <textarea
+                      value={draftDescription}
+                      onChange={(event) =>
+                        setDraftDescription(event.target.value)
                       }
-                    }}
-                    className="rounded-full border border-rose-400/20 px-4 py-2 text-rose-200 transition hover:border-rose-300/40"
-                  >
-                    Delete watchlist
-                  </button>
-                </div>
-              </form>
+                      className="min-h-24 w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                    />
+                  </label>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="submit"
+                      className="rounded-full bg-white px-4 py-2 font-medium text-stone-900 transition hover:bg-stone-200"
+                    >
+                      Save
+                    </button>
+                    {feedbackMap["settings"] ? (
+                      <span className="text-xs text-emerald-400">
+                        {feedbackMap["settings"]}
+                      </span>
+                    ) : null}
+                  </div>
+                </form>
+
+                <hr className="my-6 border-white/10" />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Delete this watchlist?")) {
+                      deleteWatchlist.mutate({ watchlistId });
+                    }
+                  }}
+                  className="rounded-full border border-rose-400/20 px-4 py-2 text-sm text-rose-200 transition hover:border-rose-300/40"
+                >
+                  Delete watchlist
+                </button>
+              </>
             ) : (
               <p className="mt-5 text-sm text-stone-400">
                 Only the owner can change watchlist settings.
@@ -775,12 +874,19 @@ export function WatchlistDetailClient({
                   className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
                   placeholder="friend@example.com"
                 />
-                <button
-                  type="submit"
-                  className="rounded-full bg-white px-4 py-2 font-medium text-stone-900 transition hover:bg-stone-200"
-                >
-                  Send invite
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="submit"
+                    className="rounded-full bg-white px-4 py-2 font-medium text-stone-900 transition hover:bg-stone-200"
+                  >
+                    Send invite
+                  </button>
+                  {feedbackMap["invite"] ? (
+                    <span className="text-xs text-emerald-400">
+                      {feedbackMap["invite"]}
+                    </span>
+                  ) : null}
+                </div>
               </form>
             ) : null}
 
