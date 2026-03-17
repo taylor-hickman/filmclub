@@ -21,8 +21,7 @@ export const featureRegistry = {
     name: "Watchlists",
     shortName: "Watchlists",
     summary: "Collaborative watchlists.",
-    detail:
-      "Build and share movie queues with your group.",
+    detail: "Build and share movie queues with your group.",
     href: "/app/watchlists",
     badge: "Watchlists",
     ctaLabel: "Open",

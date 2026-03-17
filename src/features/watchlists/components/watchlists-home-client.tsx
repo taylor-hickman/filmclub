@@ -114,9 +114,7 @@ function CreateWatchlistForm({
         ) : null}
       </div>
 
-      {error ? (
-        <p className="text-sm text-rose-300">{error}</p>
-      ) : null}
+      {error ? <p className="text-sm text-rose-300">{error}</p> : null}
     </form>
   );
 }
@@ -135,8 +133,7 @@ export function WatchlistsHomeClient() {
     },
   });
 
-  const showEmptyState =
-    watchlistsQuery.data?.length === 0;
+  const showEmptyState = watchlistsQuery.data?.length === 0;
 
   return (
     <div className="space-y-6">
@@ -217,12 +214,10 @@ export function WatchlistsHomeClient() {
                           {watchlist.itemCount}{" "}
                           {watchlist.itemCount === 1 ? "title" : "titles"} ·{" "}
                           {watchlist.memberCount}{" "}
-                          {watchlist.memberCount === 1
-                            ? "member"
-                            : "members"}
+                          {watchlist.memberCount === 1 ? "member" : "members"}
                         </p>
                         {watchlist.description ? (
-                          <p className="text-sm text-stone-200 line-clamp-2">
+                          <p className="line-clamp-2 text-sm text-stone-200">
                             {watchlist.description}
                           </p>
                         ) : null}
