@@ -21,8 +21,6 @@ type WatchlistDetailClientProps = {
   watchlistId: string;
 };
 
-const weightOptions = [1, 2, 3, 4, 5] as const;
-
 function CreditLine({
   creditNames,
   mediaType,
@@ -56,6 +54,9 @@ export function WatchlistDetailClient({
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
+  const [expandedWeights, setExpandedWeights] = useState<Set<string>>(
+    new Set(),
+  );
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
   const [openPanel, setOpenPanel] = useState<
     "settings" | "collaborators" | null
@@ -824,6 +825,29 @@ export function WatchlistDetailClient({
                             <span className="rounded-full bg-white/5 px-2 py-0.5 text-[10px] tracking-wide text-stone-300 uppercase sm:px-3 sm:py-1 sm:text-xs">
                               {item.status}
                             </span>
+                            {item.totalWeight > 0 ? (
+                              <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] tracking-wide text-stone-300 sm:px-2.5 sm:py-1 sm:text-xs">
+                                <svg
+                                  width="10"
+                                  height="10"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="shrink-0"
+                                >
+                                  <path d="m18 15-6-6-6 6" />
+                                </svg>
+                                {item.totalWeight}
+                                pt{item.totalWeight === 1 ? "" : "s"}
+                                <span className="text-stone-500">
+                                  ·
+                                </span>
+                                {item.weightCount}
+                              </span>
+                            ) : null}
                           </div>
                           <CreditLine
                             creditNames={item.creditNames}
@@ -848,83 +872,7 @@ export function WatchlistDetailClient({
                       </div>
 
                       <div className="flex flex-col gap-3 xl:items-end">
-                        <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5 xl:text-right">
-                          <p className="text-[10px] tracking-[0.2em] text-stone-500 uppercase">
-                            Priority
-                          </p>
-                          <p className="mt-1 text-sm font-medium text-white">
-                            {item.totalWeight} point
-                            {item.totalWeight === 1 ? "" : "s"}
-                          </p>
-                          <p className="text-xs text-stone-400">
-                            {item.weightCount === 0
-                              ? "No votes yet"
-                              : `${item.weightCount} vote${item.weightCount === 1 ? "" : "s"}`}
-                            {item.viewerWeight === null
-                              ? " · You have not voted"
-                              : ` · You: ${item.viewerWeight}`}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2 xl:justify-end">
-                          {weightOptions.map((weight) => (
-                            <button
-                              key={weight}
-                              type="button"
-                              onClick={() =>
-                                void setItemWeight
-                                  .mutateAsync({
-                                    itemId: item.id,
-                                    weight,
-                                  })
-                                  .then(() => {
-                                    showFeedback(
-                                      `weight-${item.id}`,
-                                      `Priority ${weight}`,
-                                    );
-                                  })
-                              }
-                              disabled={setItemWeight.isPending}
-                              aria-label={`Set priority to ${weight}`}
-                              className={`min-h-[40px] min-w-[40px] rounded-full border px-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${
-                                item.viewerWeight === weight
-                                  ? "border-white/40 bg-white text-stone-950"
-                                  : "border-white/15 text-white hover:border-white/30"
-                              }`}
-                            >
-                              {weight}
-                            </button>
-                          ))}
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              void setItemWeight
-                                .mutateAsync({
-                                  itemId: item.id,
-                                  weight: null,
-                                })
-                                .then(() => {
-                                  showFeedback(`weight-${item.id}`, "Cleared");
-                                })
-                            }
-                            disabled={
-                              item.viewerWeight === null ||
-                              setItemWeight.isPending
-                            }
-                            className="min-h-[40px] rounded-full border border-white/15 px-3 text-sm text-stone-300 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-                          >
-                            Clear
-                          </button>
-                        </div>
-
-                        {feedbackMap[`weight-${item.id}`] ? (
-                          <span className="text-xs text-emerald-400">
-                            {feedbackMap[`weight-${item.id}`]}
-                          </span>
-                        ) : null}
-
-                        <div className="flex items-center gap-1 xl:justify-end">
+                        <div className="flex flex-wrap items-center gap-1 xl:justify-end">
                           <button
                             type="button"
                             onClick={() =>
@@ -1006,6 +954,125 @@ export function WatchlistDetailClient({
                               </svg>
                             </button>
                           )}
+
+                          {expandedWeights.has(item.id) ? (
+                            <div className="flex items-center gap-0 rounded-full border border-white/15 overflow-hidden">
+                              {([1, 2, 3, 4, 5] as const).map((weight) => (
+                                <button
+                                  key={weight}
+                                  type="button"
+                                  onClick={() => {
+                                    const newWeight =
+                                      item.viewerWeight === weight
+                                        ? null
+                                        : weight;
+                                    void setItemWeight
+                                      .mutateAsync({
+                                        itemId: item.id,
+                                        weight: newWeight,
+                                      })
+                                      .then(() => {
+                                        showFeedback(
+                                          `weight-${item.id}`,
+                                          newWeight
+                                            ? `Priority ${newWeight}`
+                                            : "Cleared",
+                                        );
+                                        setExpandedWeights((prev) => {
+                                          const next = new Set(prev);
+                                          next.delete(item.id);
+                                          return next;
+                                        });
+                                      });
+                                  }}
+                                  disabled={setItemWeight.isPending}
+                                  aria-label={
+                                    item.viewerWeight === weight
+                                      ? `Clear priority ${weight}`
+                                      : `Set priority to ${weight}`
+                                  }
+                                  className={`h-[36px] w-[36px] text-xs font-medium transition disabled:opacity-60 ${
+                                    item.viewerWeight === weight
+                                      ? "bg-white text-stone-950"
+                                      : "text-stone-300 hover:bg-white/10 hover:text-white"
+                                  }`}
+                                >
+                                  {weight}
+                                </button>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setExpandedWeights((prev) => {
+                                    const next = new Set(prev);
+                                    next.delete(item.id);
+                                    return next;
+                                  })
+                                }
+                                aria-label="Close weight picker"
+                                className="h-[36px] w-[36px] text-stone-500 transition hover:text-white"
+                              >
+                                <svg
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="mx-auto"
+                                >
+                                  <path d="M18 6 6 18" />
+                                  <path d="m6 6 12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setExpandedWeights((prev) =>
+                                  new Set(prev).add(item.id),
+                                )
+                              }
+                              aria-label={
+                                item.viewerWeight !== null
+                                  ? `Your priority: ${item.viewerWeight}. Tap to change`
+                                  : "Vote on priority"
+                              }
+                              className={`min-h-[44px] rounded-full border px-3 transition ${
+                                item.viewerWeight !== null
+                                  ? "border-white/30 bg-white/10 text-white"
+                                  : "border-white/15 text-stone-400 hover:border-white/30 hover:text-white"
+                              }`}
+                            >
+                              <span className="flex items-center gap-1.5">
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="m18 15-6-6-6 6" />
+                                </svg>
+                                <span className="text-xs font-medium">
+                                  {item.viewerWeight !== null
+                                    ? item.viewerWeight
+                                    : "Vote"}
+                                </span>
+                              </span>
+                            </button>
+                          )}
+                          {feedbackMap[`weight-${item.id}`] ? (
+                            <span className="text-xs text-emerald-400">
+                              {feedbackMap[`weight-${item.id}`]}
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                     </div>
