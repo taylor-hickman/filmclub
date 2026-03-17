@@ -54,6 +54,9 @@ export function WatchlistDetailClient({
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
+  const [openPanel, setOpenPanel] = useState<
+    "settings" | "collaborators" | null
+  >(null);
 
   const showFeedback = useCallback((key: string, message: string) => {
     setFeedbackMap((prev) => ({ ...prev, [key]: message }));
@@ -222,16 +225,312 @@ export function WatchlistDetailClient({
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-center gap-3 text-sm text-stone-400">
-        <Link href="/app/watchlists" className="transition hover:text-white">
-          ← Back to watchlists
-        </Link>
-        <span>Owner: {watchlist.owner.name ?? watchlist.owner.email}</span>
-        <span>{watchlist.items.length} titles</span>
+      <div className="flex items-center justify-between gap-3 text-sm text-stone-400">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/app/watchlists" className="transition hover:text-white">
+            ← Back to watchlists
+          </Link>
+          <span>Owner: {watchlist.owner.name ?? watchlist.owner.email}</span>
+          <span>{watchlist.items.length} titles</span>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() =>
+              setOpenPanel((prev) =>
+                prev === "collaborators" ? null : "collaborators",
+              )
+            }
+            aria-label="Collaborators"
+            className={`rounded-full p-2 transition ${openPanel === "collaborators" ? "bg-white/10 text-white" : "text-stone-400 hover:text-white"}`}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setOpenPanel((prev) =>
+                prev === "settings" ? null : "settings",
+              )
+            }
+            aria-label="Settings"
+            className={`rounded-full p-2 transition ${openPanel === "settings" ? "bg-white/10 text-white" : "text-stone-400 hover:text-white"}`}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <section className="grid gap-8 xl:grid-cols-[1.3fr_0.7fr]">
-        <div className="space-y-8">
+      {/* Collapsible settings panel */}
+      {openPanel === "settings" ? (
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-white">Settings</h2>
+            <button
+              type="button"
+              onClick={() => setOpenPanel(null)}
+              className="text-sm text-stone-400 transition hover:text-white"
+            >
+              Close
+            </button>
+          </div>
+
+          {watchlist.canManage ? (
+            <>
+              <form
+                className="mt-4 space-y-4"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  void updateWatchlist
+                    .mutateAsync({
+                      watchlistId,
+                      name: draftName,
+                      description: draftDescription ?? undefined,
+                    })
+                    .then(() => showFeedback("settings", "Saved"));
+                }}
+              >
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="block space-y-2">
+                    <span className="text-sm text-stone-300">Name</span>
+                    <input
+                      required
+                      value={draftName}
+                      onChange={(event) => setDraftName(event.target.value)}
+                      className="w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                    />
+                  </label>
+
+                  <label className="block space-y-2">
+                    <span className="text-sm text-stone-300">Description</span>
+                    <input
+                      value={draftDescription}
+                      onChange={(event) =>
+                        setDraftDescription(event.target.value)
+                      }
+                      className="w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                    />
+                  </label>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="submit"
+                    className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
+                  >
+                    Save
+                  </button>
+                  {feedbackMap.settings ? (
+                    <span className="text-xs text-emerald-400">
+                      {feedbackMap.settings}
+                    </span>
+                  ) : null}
+                </div>
+              </form>
+
+              <hr className="my-5 border-white/10" />
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm("Delete this watchlist?")) {
+                    deleteWatchlist.mutate({ watchlistId });
+                  }
+                }}
+                className="rounded-full border border-rose-400/20 px-4 py-2 text-sm text-rose-200 transition hover:border-rose-300/40"
+              >
+                Delete watchlist
+              </button>
+            </>
+          ) : (
+            <p className="mt-4 text-sm text-stone-400">
+              Only the owner can change watchlist settings.
+            </p>
+          )}
+
+          {updateWatchlist.error ? (
+            <p className="mt-4 text-sm text-rose-300">
+              {updateWatchlist.error.message}
+            </p>
+          ) : null}
+          {deleteWatchlist.error ? (
+            <p className="mt-4 text-sm text-rose-300">
+              {deleteWatchlist.error.message}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* Collapsible collaborators panel */}
+      {openPanel === "collaborators" ? (
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-white">Collaborators</h2>
+            <button
+              type="button"
+              onClick={() => setOpenPanel(null)}
+              className="text-sm text-stone-400 transition hover:text-white"
+            >
+              Close
+            </button>
+          </div>
+
+          {watchlist.canManage ? (
+            <form
+              className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end"
+              onSubmit={(event) => {
+                event.preventDefault();
+                inviteMember.mutate({
+                  watchlistId,
+                  email: inviteEmail,
+                });
+              }}
+            >
+              <input
+                required
+                type="email"
+                value={inviteEmail}
+                onChange={(event) => setInviteEmail(event.target.value)}
+                className="w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30 sm:max-w-xs"
+                placeholder="friend@example.com"
+              />
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="submit"
+                  className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
+                >
+                  Send invite
+                </button>
+                {feedbackMap.invite ? (
+                  <span className="text-xs text-emerald-400">
+                    {feedbackMap.invite}
+                  </span>
+                ) : null}
+              </div>
+            </form>
+          ) : null}
+
+          {inviteMember.error ? (
+            <p className="mt-4 text-sm text-rose-300">
+              {inviteMember.error.message}
+            </p>
+          ) : null}
+
+          <div className="mt-5 flex flex-wrap gap-3">
+            {watchlist.members.map((member) => (
+              <div
+                key={member.id}
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-stone-950/80 px-4 py-2.5"
+              >
+                <div>
+                  <span className="text-sm font-medium text-white">
+                    {member.user.name ?? member.user.email}
+                  </span>
+                  <span className="ml-2 text-xs tracking-wide text-stone-500 uppercase">
+                    {member.role}
+                  </span>
+                </div>
+
+                {watchlist.canManage && member.role !== "OWNER" ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      removeMember.mutate({
+                        watchlistId,
+                        userId: member.userId,
+                      })
+                    }
+                    className="text-xs text-rose-300 transition hover:text-rose-200"
+                  >
+                    Remove
+                  </button>
+                ) : null}
+              </div>
+            ))}
+          </div>
+
+          {watchlist.invites.length > 0 ? (
+            <div className="mt-4">
+              <h3 className="text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
+                Pending invites
+              </h3>
+              <div className="mt-2 flex flex-wrap gap-3">
+                {watchlist.invites.map((invite) => (
+                  <div
+                    key={invite.id}
+                    className="flex items-center gap-3 rounded-xl border border-white/10 bg-stone-950/80 px-4 py-2.5"
+                  >
+                    <div>
+                      <span className="text-sm font-medium text-white">
+                        {invite.email}
+                      </span>
+                      <span className="ml-2 text-xs text-stone-500">
+                        expires{" "}
+                        {new Date(invite.expiresAt).toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    {watchlist.canManage ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          revokeInvite.mutate({
+                            watchlistId,
+                            inviteId: invite.id,
+                          })
+                        }
+                        className="text-xs text-stone-400 transition hover:text-white"
+                      >
+                        Revoke
+                      </button>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {removeMember.error ? (
+            <p className="mt-4 text-sm text-rose-300">
+              {removeMember.error.message}
+            </p>
+          ) : null}
+          {revokeInvite.error ? (
+            <p className="mt-4 text-sm text-rose-300">
+              {revokeInvite.error.message}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
+
+      <div className="space-y-8">
           {/* Hero — compact when no backdrop image */}
           <TmdbBackdrop
             title={watchlist.name}
@@ -761,229 +1060,6 @@ export function WatchlistDetailClient({
             ) : null}
           </section>
         </div>
-
-        <aside className="space-y-8">
-          <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-xl font-semibold text-white">Settings</h2>
-
-            {watchlist.canManage ? (
-              <>
-                <form
-                  className="mt-5 space-y-4"
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    void updateWatchlist
-                      .mutateAsync({
-                        watchlistId,
-                        name: draftName,
-                        description: draftDescription ?? undefined,
-                      })
-                      .then(() => showFeedback("settings", "Saved"));
-                  }}
-                >
-                  <label className="block space-y-2">
-                    <span className="text-sm text-stone-300">Name</span>
-                    <input
-                      required
-                      value={draftName}
-                      onChange={(event) => setDraftName(event.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
-                    />
-                  </label>
-
-                  <label className="block space-y-2">
-                    <span className="text-sm text-stone-300">Description</span>
-                    <textarea
-                      value={draftDescription}
-                      onChange={(event) =>
-                        setDraftDescription(event.target.value)
-                      }
-                      className="min-h-24 w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
-                    />
-                  </label>
-
-                  <div className="flex flex-wrap items-center gap-3">
-                    <button
-                      type="submit"
-                      className="rounded-full bg-white px-4 py-2 font-medium text-stone-900 transition hover:bg-stone-200"
-                    >
-                      Save
-                    </button>
-                    {feedbackMap.settings ? (
-                      <span className="text-xs text-emerald-400">
-                        {feedbackMap.settings}
-                      </span>
-                    ) : null}
-                  </div>
-                </form>
-
-                <hr className="my-6 border-white/10" />
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (window.confirm("Delete this watchlist?")) {
-                      deleteWatchlist.mutate({ watchlistId });
-                    }
-                  }}
-                  className="rounded-full border border-rose-400/20 px-4 py-2 text-sm text-rose-200 transition hover:border-rose-300/40"
-                >
-                  Delete watchlist
-                </button>
-              </>
-            ) : (
-              <p className="mt-5 text-sm text-stone-400">
-                Only the owner can change watchlist settings.
-              </p>
-            )}
-
-            {updateWatchlist.error ? (
-              <p className="mt-4 text-sm text-rose-300">
-                {updateWatchlist.error.message}
-              </p>
-            ) : null}
-            {deleteWatchlist.error ? (
-              <p className="mt-4 text-sm text-rose-300">
-                {deleteWatchlist.error.message}
-              </p>
-            ) : null}
-          </section>
-
-          <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-xl font-semibold text-white">
-              Collaborators
-            </h2>
-
-            {watchlist.canManage ? (
-              <form
-                className="mt-5 flex flex-col gap-3"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  inviteMember.mutate({
-                    watchlistId,
-                    email: inviteEmail,
-                  });
-                }}
-              >
-                <input
-                  required
-                  type="email"
-                  value={inviteEmail}
-                  onChange={(event) => setInviteEmail(event.target.value)}
-                  className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
-                  placeholder="friend@example.com"
-                />
-                <div className="flex flex-wrap items-center gap-3">
-                  <button
-                    type="submit"
-                    className="rounded-full bg-white px-4 py-2 font-medium text-stone-900 transition hover:bg-stone-200"
-                  >
-                    Send invite
-                  </button>
-                  {feedbackMap.invite ? (
-                    <span className="text-xs text-emerald-400">
-                      {feedbackMap.invite}
-                    </span>
-                  ) : null}
-                </div>
-              </form>
-            ) : null}
-
-            {inviteMember.error ? (
-              <p className="mt-4 text-sm text-rose-300">
-                {inviteMember.error.message}
-              </p>
-            ) : null}
-
-            <div className="mt-6 space-y-3">
-              {watchlist.members.map((member) => (
-                <div
-                  key={member.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-stone-950/80 px-4 py-3"
-                >
-                  <div>
-                    <div className="font-medium text-white">
-                      {member.user.name ?? member.user.email}
-                    </div>
-                    <div className="text-xs tracking-wide text-stone-500 uppercase">
-                      {member.role}
-                    </div>
-                  </div>
-
-                  {watchlist.canManage && member.role !== "OWNER" ? (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        removeMember.mutate({
-                          watchlistId,
-                          userId: member.userId,
-                        })
-                      }
-                      className="rounded-full border border-rose-400/20 px-3 py-2 text-sm text-rose-200 transition hover:border-rose-300/40"
-                    >
-                      Remove
-                    </button>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6">
-              <h3 className="text-sm font-semibold tracking-[0.18em] text-stone-500 uppercase">
-                Pending invites
-              </h3>
-              <div className="mt-3 space-y-3">
-                {watchlist.invites.length === 0 ? (
-                  <p className="text-sm text-stone-400">No pending invites.</p>
-                ) : null}
-
-                {watchlist.invites.map((invite) => (
-                  <div
-                    key={invite.id}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-stone-950/80 px-4 py-3"
-                  >
-                    <div>
-                      <div className="font-medium text-white">
-                        {invite.email}
-                      </div>
-                      <div className="text-xs tracking-wide text-stone-500 uppercase">
-                        Expires{" "}
-                        {new Date(invite.expiresAt).toLocaleDateString()}
-                      </div>
-                    </div>
-
-                    {watchlist.canManage ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          revokeInvite.mutate({
-                            watchlistId,
-                            inviteId: invite.id,
-                          })
-                        }
-                        className="rounded-full border border-white/15 px-3 py-2 text-sm transition hover:border-white/30"
-                      >
-                        Revoke
-                      </button>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {removeMember.error ? (
-              <p className="mt-4 text-sm text-rose-300">
-                {removeMember.error.message}
-              </p>
-            ) : null}
-            {revokeInvite.error ? (
-              <p className="mt-4 text-sm text-rose-300">
-                {revokeInvite.error.message}
-              </p>
-            ) : null}
-          </section>
-        </aside>
-      </section>
     </div>
   );
 }
