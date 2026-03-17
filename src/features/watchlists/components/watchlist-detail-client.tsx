@@ -147,7 +147,11 @@ export function WatchlistDetailClient({
     onSuccess: invalidateWatchlist,
   });
   const addItem = api.items.add.useMutation({
-    onSuccess: invalidateWatchlist,
+    onSuccess: () => {
+      setSearchInput("");
+      setSearchQuery("");
+      void invalidateWatchlist();
+    },
   });
   const updateItem = api.items.update.useMutation({
     onSuccess: invalidateWatchlist,
@@ -538,8 +542,8 @@ export function WatchlistDetailClient({
         </TmdbBackdrop>
 
         {/* Queue section with integrated search */}
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-3 sm:rounded-3xl sm:p-6">
-          <div className="sticky top-0 z-10 bg-[#0a0a0a] pb-3">
+        <section>
+          <div className="sticky top-0 z-10 bg-[#0a0a0a] pb-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-xl font-semibold text-white">Queue</h2>
               <div className="relative flex-1 sm:max-w-sm">
