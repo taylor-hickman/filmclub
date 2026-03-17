@@ -225,17 +225,17 @@ export function WatchlistDetailClient({
   const mediaType = watchlist.mediaType;
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between gap-3 text-sm text-stone-400">
-        <div className="flex flex-wrap items-center gap-3">
-          <Link href="/app/watchlists" className="transition hover:text-white">
-            ← Back to watchlists
+    <div className="space-y-5 sm:space-y-8">
+      <div className="flex items-center justify-between gap-2 text-sm text-stone-400">
+        <div className="flex min-w-0 items-center gap-2 overflow-hidden">
+          <Link href="/app/watchlists" className="shrink-0 transition hover:text-white">
+            ←
           </Link>
-          <span>Owner: {watchlist.owner.name ?? watchlist.owner.email}</span>
-          <span>{watchlist.items.length} titles</span>
+          <span className="truncate">{watchlist.owner.name ?? watchlist.owner.email}</span>
+          <span className="shrink-0">{watchlist.items.length} titles</span>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-0.5">
           <button
             type="button"
             onClick={() =>
@@ -244,18 +244,9 @@ export function WatchlistDetailClient({
               )
             }
             aria-label="Collaborators"
-            className={`rounded-full p-2 transition ${openPanel === "collaborators" ? "bg-white/10 text-white" : "text-stone-400 hover:text-white"}`}
+            className={`min-h-[44px] min-w-[44px] rounded-full p-2.5 transition ${openPanel === "collaborators" ? "bg-white/10 text-white" : "text-stone-400 hover:text-white"}`}
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
               <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
@@ -270,18 +261,9 @@ export function WatchlistDetailClient({
               )
             }
             aria-label="Settings"
-            className={`rounded-full p-2 transition ${openPanel === "settings" ? "bg-white/10 text-white" : "text-stone-400 hover:text-white"}`}
+            className={`min-h-[44px] min-w-[44px] rounded-full p-2.5 transition ${openPanel === "settings" ? "bg-white/10 text-white" : "text-stone-400 hover:text-white"}`}
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
@@ -291,13 +273,13 @@ export function WatchlistDetailClient({
 
       {/* Collapsible settings panel */}
       {openPanel === "settings" ? (
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-white">Settings</h2>
             <button
               type="button"
               onClick={() => setOpenPanel(null)}
-              className="text-sm text-stone-400 transition hover:text-white"
+              className="min-h-[44px] px-2 text-sm text-stone-400 transition hover:text-white"
             >
               Close
             </button>
@@ -325,7 +307,7 @@ export function WatchlistDetailClient({
                       required
                       value={draftName}
                       onChange={(event) => setDraftName(event.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                      className="w-full rounded-xl border border-white/10 bg-stone-950 px-3.5 py-3 text-base text-white transition outline-none focus:border-white/30"
                     />
                   </label>
 
@@ -336,7 +318,7 @@ export function WatchlistDetailClient({
                       onChange={(event) =>
                         setDraftDescription(event.target.value)
                       }
-                      className="w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30"
+                      className="w-full rounded-xl border border-white/10 bg-stone-950 px-3.5 py-3 text-base text-white transition outline-none focus:border-white/30"
                     />
                   </label>
                 </div>
@@ -344,7 +326,7 @@ export function WatchlistDetailClient({
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     type="submit"
-                    className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
+                    className="min-h-[44px] rounded-full bg-white px-4 py-2.5 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
                   >
                     Save
                   </button>
@@ -391,13 +373,13 @@ export function WatchlistDetailClient({
 
       {/* Collapsible collaborators panel */}
       {openPanel === "collaborators" ? (
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-white">Collaborators</h2>
             <button
               type="button"
               onClick={() => setOpenPanel(null)}
-              className="text-sm text-stone-400 transition hover:text-white"
+              className="min-h-[44px] px-2 text-sm text-stone-400 transition hover:text-white"
             >
               Close
             </button>
@@ -419,13 +401,13 @@ export function WatchlistDetailClient({
                 type="email"
                 value={inviteEmail}
                 onChange={(event) => setInviteEmail(event.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-stone-950 px-4 py-3 text-white transition outline-none focus:border-white/30 sm:max-w-xs"
+                className="w-full rounded-xl border border-white/10 bg-stone-950 px-3.5 py-3 text-base text-white transition outline-none focus:border-white/30 sm:max-w-xs"
                 placeholder="friend@example.com"
               />
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="submit"
-                  className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
+                  className="min-h-[44px] rounded-full bg-white px-4 py-2.5 text-sm font-medium text-stone-900 transition hover:bg-stone-200"
                 >
                   Send invite
                 </button>
@@ -531,30 +513,30 @@ export function WatchlistDetailClient({
         </section>
       ) : null}
 
-      <div className="space-y-8">
+      <div className="space-y-5 sm:space-y-8">
           {/* Hero — compact when no backdrop image */}
           <TmdbBackdrop
             title={watchlist.name}
             backdropPath={leadItem?.backdropPath ?? null}
             posterPath={leadItem?.posterPath ?? null}
             priority
-            className={`border border-white/10 ${hasBackdrop ? "min-h-[16rem]" : ""}`}
+            className={`border border-white/10 ${hasBackdrop ? "min-h-[12rem] sm:min-h-[16rem]" : ""}`}
           >
             <div
-              className={`flex h-full flex-col justify-end ${hasBackdrop ? "gap-8 p-6 sm:p-8" : "gap-4 p-4 sm:p-5"}`}
+              className={`flex h-full flex-col justify-end ${hasBackdrop ? "gap-4 p-4 sm:gap-8 sm:p-8" : "gap-3 p-3 sm:gap-4 sm:p-5"}`}
             >
-              <div className="flex flex-wrap items-center gap-3 text-sm text-stone-300">
-                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-stone-200">
+              <div className="flex flex-wrap items-center gap-2 text-sm text-stone-300">
+                <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-0.5 text-xs text-stone-200">
                   {getWatchlistBadgeLabel(mediaType)}
                 </span>
               </div>
 
               <div>
-                <h1 className="max-w-3xl text-3xl font-semibold text-white sm:text-4xl">
+                <h1 className="text-2xl font-semibold text-white sm:text-4xl">
                   {watchlist.name}
                 </h1>
                 {watchlist.description ? (
-                  <p className="mt-3 max-w-2xl text-stone-200">
+                  <p className="mt-2 text-sm text-stone-200 sm:mt-3 sm:text-base">
                     {watchlist.description}
                   </p>
                 ) : null}
@@ -563,7 +545,7 @@ export function WatchlistDetailClient({
           </TmdbBackdrop>
 
           {/* Queue section with integrated search */}
-          <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <section className="rounded-2xl border border-white/10 bg-white/5 p-3 sm:rounded-3xl sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-xl font-semibold text-white">Queue</h2>
               <div className="relative flex-1 sm:max-w-sm">
@@ -606,7 +588,7 @@ export function WatchlistDetailClient({
                         setSearchFocused(false);
                       }
                     }}
-                    className="w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 pr-20 text-sm text-white transition outline-none focus:border-white/30"
+                    className="w-full rounded-xl border border-white/10 bg-stone-950 px-3.5 py-3 pr-16 text-base text-white transition outline-none focus:border-white/30 sm:rounded-2xl sm:pr-20"
                     placeholder={getSearchPlaceholder(mediaType)}
                   />
 
@@ -618,7 +600,7 @@ export function WatchlistDetailClient({
                         setSearchQuery("");
                         setSearchFocused(false);
                       }}
-                      className="absolute right-3 rounded-full border border-white/10 px-2 py-0.5 text-xs text-stone-400 transition hover:border-white/25 hover:text-white"
+                      className="absolute right-3 min-h-[36px] rounded-full border border-white/10 px-3 py-1.5 text-xs text-stone-400 transition hover:border-white/25 hover:text-white"
                     >
                       Clear
                     </button>
@@ -643,7 +625,7 @@ export function WatchlistDetailClient({
                         {getSearchEmptyLabel(mediaType)}
                       </div>
                     ) : (
-                      <div className="max-h-[22rem] overflow-y-auto p-2">
+                      <div className="max-h-[60vh] overflow-y-auto p-2 sm:max-h-[22rem]">
                         {suggestionResults.map((result, index) => {
                           const alreadyAdded = existingTmdbIds.has(
                             result.tmdbId,
@@ -822,23 +804,23 @@ export function WatchlistDetailClient({
                   key={item.id}
                   className="overflow-hidden rounded-2xl border border-white/10 bg-stone-950/85"
                 >
-                  <div className="grid gap-5 p-4 lg:grid-cols-[210px_1fr] lg:p-5">
+                  <div className="grid grid-cols-[80px_1fr] gap-3 p-3 sm:gap-5 sm:p-4 lg:grid-cols-[210px_1fr] lg:p-5">
                     <TmdbPoster
                       title={item.title}
                       posterPath={item.posterPath}
                       backdropPath={item.backdropPath}
-                      className="aspect-[2/3] rounded-[1.25rem]"
+                      className="aspect-[2/3] rounded-lg sm:rounded-[1.25rem]"
                     />
 
-                    <div className="space-y-5">
-                      <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                        <div className="space-y-3">
+                    <div className="min-w-0 space-y-3 sm:space-y-5">
+                      <div className="flex flex-col gap-3 sm:gap-4 xl:flex-row xl:items-start xl:justify-between">
+                        <div className="min-w-0 space-y-2 sm:space-y-3">
                           <div className="space-y-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="rounded-full border border-white/10 px-3 py-1 text-xs tracking-wide text-stone-300 uppercase">
+                            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                              <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] tracking-wide text-stone-300 uppercase sm:px-3 sm:py-1 sm:text-xs">
                                 #{index + 1}
                               </span>
-                              <h3 className="text-2xl font-semibold text-white">
+                              <h3 className="text-lg font-semibold text-white sm:text-2xl">
                                 {item.title}
                               </h3>
                               {item.year ? (
@@ -846,7 +828,7 @@ export function WatchlistDetailClient({
                                   {item.year}
                                 </span>
                               ) : null}
-                              <span className="rounded-full bg-white/5 px-3 py-1 text-xs tracking-wide text-stone-300 uppercase">
+                              <span className="rounded-full bg-white/5 px-2 py-0.5 text-[10px] tracking-wide text-stone-300 uppercase sm:px-3 sm:py-1 sm:text-xs">
                                 {item.status}
                               </span>
                             </div>
@@ -872,15 +854,15 @@ export function WatchlistDetailClient({
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1">
                           <button
                             type="button"
                             onClick={() => moveItem(item.id, "up")}
                             disabled={index === 0 || reorderItems.isPending}
                             aria-label="Move up"
-                            className="rounded-full border border-white/15 p-1.5 text-stone-400 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                            className="min-h-[44px] min-w-[44px] rounded-full border border-white/15 p-2.5 text-stone-400 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                           </button>
                           <button
                             type="button"
@@ -890,9 +872,9 @@ export function WatchlistDetailClient({
                               reorderItems.isPending
                             }
                             aria-label="Move down"
-                            className="rounded-full border border-white/15 p-1.5 text-stone-400 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                            className="min-h-[44px] min-w-[44px] rounded-full border border-white/15 p-2.5 text-stone-400 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                           </button>
                           <button
                             type="button"
@@ -916,9 +898,9 @@ export function WatchlistDetailClient({
                                 })
                             }
                             aria-label={item.status === "WATCHED" ? "Move to queue" : "Mark watched"}
-                            className={`rounded-full border p-1.5 transition ${item.status === "WATCHED" ? "border-emerald-400/20 text-emerald-400 hover:border-emerald-400/40" : "border-white/15 text-stone-400 hover:border-white/30 hover:text-white"}`}
+                            className={`min-h-[44px] min-w-[44px] rounded-full border p-2.5 transition ${item.status === "WATCHED" ? "border-emerald-400/20 text-emerald-400 hover:border-emerald-400/40" : "border-white/15 text-stone-400 hover:border-white/30 hover:text-white"}`}
                           >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                           </button>
                           {feedbackMap[`watched-${item.id}`] ? (
                             <span className="text-xs text-emerald-400">
@@ -934,7 +916,7 @@ export function WatchlistDetailClient({
                               }}
                               onBlur={() => setConfirmRemove(null)}
                               autoFocus
-                              className="rounded-full border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-300 transition hover:bg-rose-500/20"
+                              className="min-h-[44px] rounded-full border border-rose-400/30 bg-rose-500/10 px-3 py-2 text-xs font-medium text-rose-300 transition hover:bg-rose-500/20"
                             >
                               Remove?
                             </button>
@@ -943,9 +925,9 @@ export function WatchlistDetailClient({
                               type="button"
                               onClick={() => setConfirmRemove(item.id)}
                               aria-label="Remove"
-                              className="rounded-full border border-rose-400/20 p-1.5 text-rose-300 transition hover:border-rose-300/40 hover:text-rose-200"
+                              className="min-h-[44px] min-w-[44px] rounded-full border border-rose-400/20 p-2.5 text-rose-300 transition hover:border-rose-300/40 hover:text-rose-200"
                             >
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                             </button>
                           )}
                         </div>
