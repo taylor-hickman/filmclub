@@ -871,15 +871,15 @@ export function WatchlistDetailClient({
                           </p>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <button
                             type="button"
                             onClick={() => moveItem(item.id, "up")}
                             disabled={index === 0 || reorderItems.isPending}
                             aria-label="Move up"
-                            className="rounded-full border border-white/15 px-2.5 py-2 text-base transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="rounded-full border border-white/15 p-1.5 text-stone-400 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            ↑
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                           </button>
                           <button
                             type="button"
@@ -889,9 +889,9 @@ export function WatchlistDetailClient({
                               reorderItems.isPending
                             }
                             aria-label="Move down"
-                            className="rounded-full border border-white/15 px-2.5 py-2 text-base transition hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="rounded-full border border-white/15 p-1.5 text-stone-400 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            ↓
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                           </button>
                           <button
                             type="button"
@@ -914,11 +914,10 @@ export function WatchlistDetailClient({
                                   );
                                 })
                             }
-                            className="rounded-full border border-white/15 px-3 py-2 text-sm transition hover:border-white/30"
+                            aria-label={item.status === "WATCHED" ? "Move to queue" : "Mark watched"}
+                            className={`rounded-full border p-1.5 transition ${item.status === "WATCHED" ? "border-emerald-400/20 text-emerald-400 hover:border-emerald-400/40" : "border-white/15 text-stone-400 hover:border-white/30 hover:text-white"}`}
                           >
-                            {item.status === "WATCHED"
-                              ? "Move to queue"
-                              : "Mark watched"}
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                           </button>
                           {feedbackMap[`watched-${item.id}`] ? (
                             <span className="text-xs text-emerald-400">
@@ -930,9 +929,10 @@ export function WatchlistDetailClient({
                             onClick={() =>
                               removeItem.mutate({ itemId: item.id })
                             }
-                            className="rounded-full border border-rose-400/20 px-3 py-2 text-sm text-rose-200 transition hover:border-rose-300/40"
+                            aria-label="Remove"
+                            className="rounded-full border border-rose-400/20 p-1.5 text-rose-300 transition hover:border-rose-300/40 hover:text-rose-200"
                           >
-                            Remove
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                           </button>
                         </div>
                       </div>
