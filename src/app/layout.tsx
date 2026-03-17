@@ -6,8 +6,8 @@ import { Fraunces, Space_Grotesk } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
-  title: "FilmClub",
-  description: "FilmClub",
+  title: "filmclub",
+  description: "filmclub",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

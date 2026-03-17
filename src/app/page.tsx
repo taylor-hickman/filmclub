@@ -14,8 +14,8 @@ export default async function HomePage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm space-y-8 text-center">
-        <h1 className="font-display text-4xl text-white sm:text-5xl">
-          FilmClub
+        <h1 className="font-display text-4xl italic text-white sm:text-5xl">
+          filmclub
         </h1>
         <p className="text-base text-stone-500">A place for your watchlists.</p>
 
