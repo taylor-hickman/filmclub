@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { TmdbPoster } from "~/app/_components/tmdb-media";
+import { TmdbBackdrop, TmdbPoster } from "~/app/_components/tmdb-media";
 import {
   getCreditPrefix,
   getEmptyQueueLabel,
@@ -167,7 +167,11 @@ export function WatchlistDetailClient({
     () => new Set(watchlist?.items.map((item) => item.tmdbId) ?? []),
     [watchlist?.items],
   );
-
+  const leadItem = useMemo(
+    () =>
+      watchlist?.items.find((item) => item.backdropPath) ?? watchlist?.items[0],
+    [watchlist?.items],
+  );
 
   const trimmedSearchInput = searchInput.trim();
   const searchReady = trimmedSearchInput.length >= 2;
@@ -175,6 +179,8 @@ export function WatchlistDetailClient({
   const isSearchPending =
     (searchReady && trimmedSearchInput !== searchQuery) ||
     mediaSearchQuery.isFetching;
+
+  const hasBackdrop = !!(leadItem?.backdropPath ?? leadItem?.posterPath);
 
   if (watchlistQuery.isLoading) {
     return (
@@ -207,6 +213,7 @@ export function WatchlistDetailClient({
           <span className="truncate">
             {watchlist.owner.name ?? watchlist.owner.email}
           </span>
+          <span className="shrink-0">{watchlist.items.length} titles</span>
         </div>
 
         <div className="flex shrink-0 items-center gap-0.5">
@@ -504,25 +511,35 @@ export function WatchlistDetailClient({
       ) : null}
 
       <div className="space-y-5 sm:space-y-8">
-        <div className="space-y-3 sm:space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-stone-300">
-              {getWatchlistBadgeLabel(mediaType)}
-            </span>
-            <span className="text-xs text-stone-500">
-              {watchlist.items.length} title{watchlist.items.length === 1 ? "" : "s"}
-            </span>
-          </div>
+        {/* Hero — compact when no backdrop image */}
+        <TmdbBackdrop
+          title={watchlist.name}
+          backdropPath={leadItem?.backdropPath ?? null}
+          posterPath={leadItem?.posterPath ?? null}
+          priority
+          className={`border border-white/10 ${hasBackdrop ? "min-h-[12rem] sm:min-h-[16rem]" : ""}`}
+        >
+          <div
+            className={`flex h-full flex-col justify-end ${hasBackdrop ? "gap-4 p-4 sm:gap-8 sm:p-8" : "gap-3 p-3 sm:gap-4 sm:p-5"}`}
+          >
+            <div className="flex flex-wrap items-center gap-2 text-sm text-stone-300">
+              <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-0.5 text-xs text-stone-200">
+                {getWatchlistBadgeLabel(mediaType)}
+              </span>
+            </div>
 
-          <h1 className="font-display text-3xl italic text-white sm:text-4xl">
-            {watchlist.name}
-          </h1>
-          {watchlist.description ? (
-            <p className="max-w-2xl text-sm leading-relaxed text-stone-400 sm:text-base">
-              {watchlist.description}
-            </p>
-          ) : null}
-        </div>
+            <div>
+              <h1 className="text-2xl font-semibold text-white sm:text-4xl">
+                {watchlist.name}
+              </h1>
+              {watchlist.description ? (
+                <p className="mt-2 text-sm text-stone-200 sm:mt-3 sm:text-base">
+                  {watchlist.description}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </TmdbBackdrop>
 
         {/* Queue section with integrated search */}
         <section>
