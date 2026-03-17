@@ -63,6 +63,11 @@ export type Watchlist = $Result.DefaultSelection<Prisma.$WatchlistPayload>
  * 
  */
 export type WatchlistItem = $Result.DefaultSelection<Prisma.$WatchlistItemPayload>
+/**
+ * Model WatchlistItemWeight
+ * 
+ */
+export type WatchlistItemWeight = $Result.DefaultSelection<Prisma.$WatchlistItemWeightPayload>
 
 /**
  * Enums
@@ -333,6 +338,16 @@ export class PrismaClient<
     * ```
     */
   get watchlistItem(): Prisma.WatchlistItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.watchlistItemWeight`: Exposes CRUD operations for the **WatchlistItemWeight** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WatchlistItemWeights
+    * const watchlistItemWeights = await prisma.watchlistItemWeight.findMany()
+    * ```
+    */
+  get watchlistItemWeight(): Prisma.WatchlistItemWeightDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -783,7 +798,8 @@ export namespace Prisma {
     FeatureMembership: 'FeatureMembership',
     FeatureInvite: 'FeatureInvite',
     Watchlist: 'Watchlist',
-    WatchlistItem: 'WatchlistItem'
+    WatchlistItem: 'WatchlistItem',
+    WatchlistItemWeight: 'WatchlistItemWeight'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -802,7 +818,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "session" | "user" | "verificationToken" | "userFeature" | "featureInstance" | "featureMembership" | "featureInvite" | "watchlist" | "watchlistItem"
+      modelProps: "account" | "session" | "user" | "verificationToken" | "userFeature" | "featureInstance" | "featureMembership" | "featureInvite" | "watchlist" | "watchlistItem" | "watchlistItemWeight"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1546,6 +1562,80 @@ export namespace Prisma {
           }
         }
       }
+      WatchlistItemWeight: {
+        payload: Prisma.$WatchlistItemWeightPayload<ExtArgs>
+        fields: Prisma.WatchlistItemWeightFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WatchlistItemWeightFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WatchlistItemWeightFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>
+          }
+          findFirst: {
+            args: Prisma.WatchlistItemWeightFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WatchlistItemWeightFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>
+          }
+          findMany: {
+            args: Prisma.WatchlistItemWeightFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>[]
+          }
+          create: {
+            args: Prisma.WatchlistItemWeightCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>
+          }
+          createMany: {
+            args: Prisma.WatchlistItemWeightCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WatchlistItemWeightCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>[]
+          }
+          delete: {
+            args: Prisma.WatchlistItemWeightDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>
+          }
+          update: {
+            args: Prisma.WatchlistItemWeightUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>
+          }
+          deleteMany: {
+            args: Prisma.WatchlistItemWeightDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WatchlistItemWeightUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WatchlistItemWeightUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>[]
+          }
+          upsert: {
+            args: Prisma.WatchlistItemWeightUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WatchlistItemWeightPayload>
+          }
+          aggregate: {
+            args: Prisma.WatchlistItemWeightAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWatchlistItemWeight>
+          }
+          groupBy: {
+            args: Prisma.WatchlistItemWeightGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WatchlistItemWeightGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WatchlistItemWeightCountArgs<ExtArgs>
+            result: $Utils.Optional<WatchlistItemWeightCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1652,6 +1742,7 @@ export namespace Prisma {
     featureInvite?: FeatureInviteOmit
     watchlist?: WatchlistOmit
     watchlistItem?: WatchlistItemOmit
+    watchlistItemWeight?: WatchlistItemWeightOmit
   }
 
   /* Types for Logging */
@@ -1739,6 +1830,7 @@ export namespace Prisma {
     sessions: number
     userFeatures: number
     watchlistItems: number
+    watchlistItemWeights: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1749,6 +1841,7 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     userFeatures?: boolean | UserCountOutputTypeCountUserFeaturesArgs
     watchlistItems?: boolean | UserCountOutputTypeCountWatchlistItemsArgs
+    watchlistItemWeights?: boolean | UserCountOutputTypeCountWatchlistItemWeightsArgs
   }
 
   // Custom InputTypes
@@ -1809,6 +1902,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWatchlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WatchlistItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountWatchlistItemWeightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WatchlistItemWeightWhereInput
   }
 
 
@@ -1880,6 +1980,37 @@ export namespace Prisma {
    */
   export type WatchlistCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WatchlistItemWhereInput
+  }
+
+
+  /**
+   * Count Type WatchlistItemCountOutputType
+   */
+
+  export type WatchlistItemCountOutputType = {
+    weights: number
+  }
+
+  export type WatchlistItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    weights?: boolean | WatchlistItemCountOutputTypeCountWeightsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WatchlistItemCountOutputType without action
+   */
+  export type WatchlistItemCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemCountOutputType
+     */
+    select?: WatchlistItemCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WatchlistItemCountOutputType without action
+   */
+  export type WatchlistItemCountOutputTypeCountWeightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WatchlistItemWeightWhereInput
   }
 
 
@@ -4303,6 +4434,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     userFeatures?: boolean | User$userFeaturesArgs<ExtArgs>
     watchlistItems?: boolean | User$watchlistItemsArgs<ExtArgs>
+    watchlistItemWeights?: boolean | User$watchlistItemWeightsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4339,6 +4471,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     userFeatures?: boolean | User$userFeaturesArgs<ExtArgs>
     watchlistItems?: boolean | User$watchlistItemsArgs<ExtArgs>
+    watchlistItemWeights?: boolean | User$watchlistItemWeightsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4354,6 +4487,7 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       userFeatures: Prisma.$UserFeaturePayload<ExtArgs>[]
       watchlistItems: Prisma.$WatchlistItemPayload<ExtArgs>[]
+      watchlistItemWeights: Prisma.$WatchlistItemWeightPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4762,6 +4896,7 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userFeatures<T extends User$userFeaturesArgs<ExtArgs> = {}>(args?: Subset<T, User$userFeaturesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     watchlistItems<T extends User$watchlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$watchlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WatchlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    watchlistItemWeights<T extends User$watchlistItemWeightsArgs<ExtArgs> = {}>(args?: Subset<T, User$watchlistItemWeightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5349,6 +5484,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WatchlistItemScalarFieldEnum | WatchlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.watchlistItemWeights
+   */
+  export type User$watchlistItemWeightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    where?: WatchlistItemWeightWhereInput
+    orderBy?: WatchlistItemWeightOrderByWithRelationInput | WatchlistItemWeightOrderByWithRelationInput[]
+    cursor?: WatchlistItemWeightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WatchlistItemWeightScalarFieldEnum | WatchlistItemWeightScalarFieldEnum[]
   }
 
   /**
@@ -12195,6 +12354,8 @@ export namespace Prisma {
     updatedAt?: boolean
     addedBy?: boolean | UserDefaultArgs<ExtArgs>
     watchlist?: boolean | WatchlistDefaultArgs<ExtArgs>
+    weights?: boolean | WatchlistItem$weightsArgs<ExtArgs>
+    _count?: boolean | WatchlistItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["watchlistItem"]>
 
   export type WatchlistItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12262,6 +12423,8 @@ export namespace Prisma {
   export type WatchlistItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addedBy?: boolean | UserDefaultArgs<ExtArgs>
     watchlist?: boolean | WatchlistDefaultArgs<ExtArgs>
+    weights?: boolean | WatchlistItem$weightsArgs<ExtArgs>
+    _count?: boolean | WatchlistItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WatchlistItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addedBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -12277,6 +12440,7 @@ export namespace Prisma {
     objects: {
       addedBy: Prisma.$UserPayload<ExtArgs>
       watchlist: Prisma.$WatchlistPayload<ExtArgs>
+      weights: Prisma.$WatchlistItemWeightPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12691,6 +12855,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     addedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     watchlist<T extends WatchlistDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WatchlistDefaultArgs<ExtArgs>>): Prisma__WatchlistClient<$Result.GetResult<Prisma.$WatchlistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    weights<T extends WatchlistItem$weightsArgs<ExtArgs> = {}>(args?: Subset<T, WatchlistItem$weightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13132,6 +13297,30 @@ export namespace Prisma {
   }
 
   /**
+   * WatchlistItem.weights
+   */
+  export type WatchlistItem$weightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    where?: WatchlistItemWeightWhereInput
+    orderBy?: WatchlistItemWeightOrderByWithRelationInput | WatchlistItemWeightOrderByWithRelationInput[]
+    cursor?: WatchlistItemWeightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WatchlistItemWeightScalarFieldEnum | WatchlistItemWeightScalarFieldEnum[]
+  }
+
+  /**
    * WatchlistItem without action
    */
   export type WatchlistItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13147,6 +13336,1119 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: WatchlistItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WatchlistItemWeight
+   */
+
+  export type AggregateWatchlistItemWeight = {
+    _count: WatchlistItemWeightCountAggregateOutputType | null
+    _avg: WatchlistItemWeightAvgAggregateOutputType | null
+    _sum: WatchlistItemWeightSumAggregateOutputType | null
+    _min: WatchlistItemWeightMinAggregateOutputType | null
+    _max: WatchlistItemWeightMaxAggregateOutputType | null
+  }
+
+  export type WatchlistItemWeightAvgAggregateOutputType = {
+    weight: number | null
+  }
+
+  export type WatchlistItemWeightSumAggregateOutputType = {
+    weight: number | null
+  }
+
+  export type WatchlistItemWeightMinAggregateOutputType = {
+    id: string | null
+    watchlistItemId: string | null
+    userId: string | null
+    weight: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WatchlistItemWeightMaxAggregateOutputType = {
+    id: string | null
+    watchlistItemId: string | null
+    userId: string | null
+    weight: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WatchlistItemWeightCountAggregateOutputType = {
+    id: number
+    watchlistItemId: number
+    userId: number
+    weight: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WatchlistItemWeightAvgAggregateInputType = {
+    weight?: true
+  }
+
+  export type WatchlistItemWeightSumAggregateInputType = {
+    weight?: true
+  }
+
+  export type WatchlistItemWeightMinAggregateInputType = {
+    id?: true
+    watchlistItemId?: true
+    userId?: true
+    weight?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WatchlistItemWeightMaxAggregateInputType = {
+    id?: true
+    watchlistItemId?: true
+    userId?: true
+    weight?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WatchlistItemWeightCountAggregateInputType = {
+    id?: true
+    watchlistItemId?: true
+    userId?: true
+    weight?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WatchlistItemWeightAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WatchlistItemWeight to aggregate.
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WatchlistItemWeights to fetch.
+     */
+    orderBy?: WatchlistItemWeightOrderByWithRelationInput | WatchlistItemWeightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WatchlistItemWeightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WatchlistItemWeights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WatchlistItemWeights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WatchlistItemWeights
+    **/
+    _count?: true | WatchlistItemWeightCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WatchlistItemWeightAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WatchlistItemWeightSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WatchlistItemWeightMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WatchlistItemWeightMaxAggregateInputType
+  }
+
+  export type GetWatchlistItemWeightAggregateType<T extends WatchlistItemWeightAggregateArgs> = {
+        [P in keyof T & keyof AggregateWatchlistItemWeight]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWatchlistItemWeight[P]>
+      : GetScalarType<T[P], AggregateWatchlistItemWeight[P]>
+  }
+
+
+
+
+  export type WatchlistItemWeightGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WatchlistItemWeightWhereInput
+    orderBy?: WatchlistItemWeightOrderByWithAggregationInput | WatchlistItemWeightOrderByWithAggregationInput[]
+    by: WatchlistItemWeightScalarFieldEnum[] | WatchlistItemWeightScalarFieldEnum
+    having?: WatchlistItemWeightScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WatchlistItemWeightCountAggregateInputType | true
+    _avg?: WatchlistItemWeightAvgAggregateInputType
+    _sum?: WatchlistItemWeightSumAggregateInputType
+    _min?: WatchlistItemWeightMinAggregateInputType
+    _max?: WatchlistItemWeightMaxAggregateInputType
+  }
+
+  export type WatchlistItemWeightGroupByOutputType = {
+    id: string
+    watchlistItemId: string
+    userId: string
+    weight: number
+    createdAt: Date
+    updatedAt: Date
+    _count: WatchlistItemWeightCountAggregateOutputType | null
+    _avg: WatchlistItemWeightAvgAggregateOutputType | null
+    _sum: WatchlistItemWeightSumAggregateOutputType | null
+    _min: WatchlistItemWeightMinAggregateOutputType | null
+    _max: WatchlistItemWeightMaxAggregateOutputType | null
+  }
+
+  type GetWatchlistItemWeightGroupByPayload<T extends WatchlistItemWeightGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WatchlistItemWeightGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WatchlistItemWeightGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WatchlistItemWeightGroupByOutputType[P]>
+            : GetScalarType<T[P], WatchlistItemWeightGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WatchlistItemWeightSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    watchlistItemId?: boolean
+    userId?: boolean
+    weight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    watchlistItem?: boolean | WatchlistItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["watchlistItemWeight"]>
+
+  export type WatchlistItemWeightSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    watchlistItemId?: boolean
+    userId?: boolean
+    weight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    watchlistItem?: boolean | WatchlistItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["watchlistItemWeight"]>
+
+  export type WatchlistItemWeightSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    watchlistItemId?: boolean
+    userId?: boolean
+    weight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    watchlistItem?: boolean | WatchlistItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["watchlistItemWeight"]>
+
+  export type WatchlistItemWeightSelectScalar = {
+    id?: boolean
+    watchlistItemId?: boolean
+    userId?: boolean
+    weight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WatchlistItemWeightOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "watchlistItemId" | "userId" | "weight" | "createdAt" | "updatedAt", ExtArgs["result"]["watchlistItemWeight"]>
+  export type WatchlistItemWeightInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    watchlistItem?: boolean | WatchlistItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type WatchlistItemWeightIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    watchlistItem?: boolean | WatchlistItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type WatchlistItemWeightIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    watchlistItem?: boolean | WatchlistItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $WatchlistItemWeightPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WatchlistItemWeight"
+    objects: {
+      watchlistItem: Prisma.$WatchlistItemPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      watchlistItemId: string
+      userId: string
+      weight: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["watchlistItemWeight"]>
+    composites: {}
+  }
+
+  type WatchlistItemWeightGetPayload<S extends boolean | null | undefined | WatchlistItemWeightDefaultArgs> = $Result.GetResult<Prisma.$WatchlistItemWeightPayload, S>
+
+  type WatchlistItemWeightCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WatchlistItemWeightFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WatchlistItemWeightCountAggregateInputType | true
+    }
+
+  export interface WatchlistItemWeightDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WatchlistItemWeight'], meta: { name: 'WatchlistItemWeight' } }
+    /**
+     * Find zero or one WatchlistItemWeight that matches the filter.
+     * @param {WatchlistItemWeightFindUniqueArgs} args - Arguments to find a WatchlistItemWeight
+     * @example
+     * // Get one WatchlistItemWeight
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WatchlistItemWeightFindUniqueArgs>(args: SelectSubset<T, WatchlistItemWeightFindUniqueArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WatchlistItemWeight that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WatchlistItemWeightFindUniqueOrThrowArgs} args - Arguments to find a WatchlistItemWeight
+     * @example
+     * // Get one WatchlistItemWeight
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WatchlistItemWeightFindUniqueOrThrowArgs>(args: SelectSubset<T, WatchlistItemWeightFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WatchlistItemWeight that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightFindFirstArgs} args - Arguments to find a WatchlistItemWeight
+     * @example
+     * // Get one WatchlistItemWeight
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WatchlistItemWeightFindFirstArgs>(args?: SelectSubset<T, WatchlistItemWeightFindFirstArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WatchlistItemWeight that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightFindFirstOrThrowArgs} args - Arguments to find a WatchlistItemWeight
+     * @example
+     * // Get one WatchlistItemWeight
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WatchlistItemWeightFindFirstOrThrowArgs>(args?: SelectSubset<T, WatchlistItemWeightFindFirstOrThrowArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WatchlistItemWeights that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WatchlistItemWeights
+     * const watchlistItemWeights = await prisma.watchlistItemWeight.findMany()
+     * 
+     * // Get first 10 WatchlistItemWeights
+     * const watchlistItemWeights = await prisma.watchlistItemWeight.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const watchlistItemWeightWithIdOnly = await prisma.watchlistItemWeight.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WatchlistItemWeightFindManyArgs>(args?: SelectSubset<T, WatchlistItemWeightFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WatchlistItemWeight.
+     * @param {WatchlistItemWeightCreateArgs} args - Arguments to create a WatchlistItemWeight.
+     * @example
+     * // Create one WatchlistItemWeight
+     * const WatchlistItemWeight = await prisma.watchlistItemWeight.create({
+     *   data: {
+     *     // ... data to create a WatchlistItemWeight
+     *   }
+     * })
+     * 
+     */
+    create<T extends WatchlistItemWeightCreateArgs>(args: SelectSubset<T, WatchlistItemWeightCreateArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WatchlistItemWeights.
+     * @param {WatchlistItemWeightCreateManyArgs} args - Arguments to create many WatchlistItemWeights.
+     * @example
+     * // Create many WatchlistItemWeights
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WatchlistItemWeightCreateManyArgs>(args?: SelectSubset<T, WatchlistItemWeightCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WatchlistItemWeights and returns the data saved in the database.
+     * @param {WatchlistItemWeightCreateManyAndReturnArgs} args - Arguments to create many WatchlistItemWeights.
+     * @example
+     * // Create many WatchlistItemWeights
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WatchlistItemWeights and only return the `id`
+     * const watchlistItemWeightWithIdOnly = await prisma.watchlistItemWeight.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WatchlistItemWeightCreateManyAndReturnArgs>(args?: SelectSubset<T, WatchlistItemWeightCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WatchlistItemWeight.
+     * @param {WatchlistItemWeightDeleteArgs} args - Arguments to delete one WatchlistItemWeight.
+     * @example
+     * // Delete one WatchlistItemWeight
+     * const WatchlistItemWeight = await prisma.watchlistItemWeight.delete({
+     *   where: {
+     *     // ... filter to delete one WatchlistItemWeight
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WatchlistItemWeightDeleteArgs>(args: SelectSubset<T, WatchlistItemWeightDeleteArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WatchlistItemWeight.
+     * @param {WatchlistItemWeightUpdateArgs} args - Arguments to update one WatchlistItemWeight.
+     * @example
+     * // Update one WatchlistItemWeight
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WatchlistItemWeightUpdateArgs>(args: SelectSubset<T, WatchlistItemWeightUpdateArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WatchlistItemWeights.
+     * @param {WatchlistItemWeightDeleteManyArgs} args - Arguments to filter WatchlistItemWeights to delete.
+     * @example
+     * // Delete a few WatchlistItemWeights
+     * const { count } = await prisma.watchlistItemWeight.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WatchlistItemWeightDeleteManyArgs>(args?: SelectSubset<T, WatchlistItemWeightDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WatchlistItemWeights.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WatchlistItemWeights
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WatchlistItemWeightUpdateManyArgs>(args: SelectSubset<T, WatchlistItemWeightUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WatchlistItemWeights and returns the data updated in the database.
+     * @param {WatchlistItemWeightUpdateManyAndReturnArgs} args - Arguments to update many WatchlistItemWeights.
+     * @example
+     * // Update many WatchlistItemWeights
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WatchlistItemWeights and only return the `id`
+     * const watchlistItemWeightWithIdOnly = await prisma.watchlistItemWeight.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WatchlistItemWeightUpdateManyAndReturnArgs>(args: SelectSubset<T, WatchlistItemWeightUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WatchlistItemWeight.
+     * @param {WatchlistItemWeightUpsertArgs} args - Arguments to update or create a WatchlistItemWeight.
+     * @example
+     * // Update or create a WatchlistItemWeight
+     * const watchlistItemWeight = await prisma.watchlistItemWeight.upsert({
+     *   create: {
+     *     // ... data to create a WatchlistItemWeight
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WatchlistItemWeight we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WatchlistItemWeightUpsertArgs>(args: SelectSubset<T, WatchlistItemWeightUpsertArgs<ExtArgs>>): Prisma__WatchlistItemWeightClient<$Result.GetResult<Prisma.$WatchlistItemWeightPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WatchlistItemWeights.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightCountArgs} args - Arguments to filter WatchlistItemWeights to count.
+     * @example
+     * // Count the number of WatchlistItemWeights
+     * const count = await prisma.watchlistItemWeight.count({
+     *   where: {
+     *     // ... the filter for the WatchlistItemWeights we want to count
+     *   }
+     * })
+    **/
+    count<T extends WatchlistItemWeightCountArgs>(
+      args?: Subset<T, WatchlistItemWeightCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WatchlistItemWeightCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WatchlistItemWeight.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WatchlistItemWeightAggregateArgs>(args: Subset<T, WatchlistItemWeightAggregateArgs>): Prisma.PrismaPromise<GetWatchlistItemWeightAggregateType<T>>
+
+    /**
+     * Group by WatchlistItemWeight.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WatchlistItemWeightGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WatchlistItemWeightGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WatchlistItemWeightGroupByArgs['orderBy'] }
+        : { orderBy?: WatchlistItemWeightGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WatchlistItemWeightGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWatchlistItemWeightGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WatchlistItemWeight model
+   */
+  readonly fields: WatchlistItemWeightFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WatchlistItemWeight.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WatchlistItemWeightClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    watchlistItem<T extends WatchlistItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WatchlistItemDefaultArgs<ExtArgs>>): Prisma__WatchlistItemClient<$Result.GetResult<Prisma.$WatchlistItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WatchlistItemWeight model
+   */
+  interface WatchlistItemWeightFieldRefs {
+    readonly id: FieldRef<"WatchlistItemWeight", 'String'>
+    readonly watchlistItemId: FieldRef<"WatchlistItemWeight", 'String'>
+    readonly userId: FieldRef<"WatchlistItemWeight", 'String'>
+    readonly weight: FieldRef<"WatchlistItemWeight", 'Int'>
+    readonly createdAt: FieldRef<"WatchlistItemWeight", 'DateTime'>
+    readonly updatedAt: FieldRef<"WatchlistItemWeight", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WatchlistItemWeight findUnique
+   */
+  export type WatchlistItemWeightFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * Filter, which WatchlistItemWeight to fetch.
+     */
+    where: WatchlistItemWeightWhereUniqueInput
+  }
+
+  /**
+   * WatchlistItemWeight findUniqueOrThrow
+   */
+  export type WatchlistItemWeightFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * Filter, which WatchlistItemWeight to fetch.
+     */
+    where: WatchlistItemWeightWhereUniqueInput
+  }
+
+  /**
+   * WatchlistItemWeight findFirst
+   */
+  export type WatchlistItemWeightFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * Filter, which WatchlistItemWeight to fetch.
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WatchlistItemWeights to fetch.
+     */
+    orderBy?: WatchlistItemWeightOrderByWithRelationInput | WatchlistItemWeightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WatchlistItemWeights.
+     */
+    cursor?: WatchlistItemWeightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WatchlistItemWeights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WatchlistItemWeights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WatchlistItemWeights.
+     */
+    distinct?: WatchlistItemWeightScalarFieldEnum | WatchlistItemWeightScalarFieldEnum[]
+  }
+
+  /**
+   * WatchlistItemWeight findFirstOrThrow
+   */
+  export type WatchlistItemWeightFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * Filter, which WatchlistItemWeight to fetch.
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WatchlistItemWeights to fetch.
+     */
+    orderBy?: WatchlistItemWeightOrderByWithRelationInput | WatchlistItemWeightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WatchlistItemWeights.
+     */
+    cursor?: WatchlistItemWeightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WatchlistItemWeights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WatchlistItemWeights.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WatchlistItemWeights.
+     */
+    distinct?: WatchlistItemWeightScalarFieldEnum | WatchlistItemWeightScalarFieldEnum[]
+  }
+
+  /**
+   * WatchlistItemWeight findMany
+   */
+  export type WatchlistItemWeightFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * Filter, which WatchlistItemWeights to fetch.
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WatchlistItemWeights to fetch.
+     */
+    orderBy?: WatchlistItemWeightOrderByWithRelationInput | WatchlistItemWeightOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WatchlistItemWeights.
+     */
+    cursor?: WatchlistItemWeightWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WatchlistItemWeights from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WatchlistItemWeights.
+     */
+    skip?: number
+    distinct?: WatchlistItemWeightScalarFieldEnum | WatchlistItemWeightScalarFieldEnum[]
+  }
+
+  /**
+   * WatchlistItemWeight create
+   */
+  export type WatchlistItemWeightCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WatchlistItemWeight.
+     */
+    data: XOR<WatchlistItemWeightCreateInput, WatchlistItemWeightUncheckedCreateInput>
+  }
+
+  /**
+   * WatchlistItemWeight createMany
+   */
+  export type WatchlistItemWeightCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WatchlistItemWeights.
+     */
+    data: WatchlistItemWeightCreateManyInput | WatchlistItemWeightCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WatchlistItemWeight createManyAndReturn
+   */
+  export type WatchlistItemWeightCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * The data used to create many WatchlistItemWeights.
+     */
+    data: WatchlistItemWeightCreateManyInput | WatchlistItemWeightCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WatchlistItemWeight update
+   */
+  export type WatchlistItemWeightUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WatchlistItemWeight.
+     */
+    data: XOR<WatchlistItemWeightUpdateInput, WatchlistItemWeightUncheckedUpdateInput>
+    /**
+     * Choose, which WatchlistItemWeight to update.
+     */
+    where: WatchlistItemWeightWhereUniqueInput
+  }
+
+  /**
+   * WatchlistItemWeight updateMany
+   */
+  export type WatchlistItemWeightUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WatchlistItemWeights.
+     */
+    data: XOR<WatchlistItemWeightUpdateManyMutationInput, WatchlistItemWeightUncheckedUpdateManyInput>
+    /**
+     * Filter which WatchlistItemWeights to update
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * Limit how many WatchlistItemWeights to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WatchlistItemWeight updateManyAndReturn
+   */
+  export type WatchlistItemWeightUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * The data used to update WatchlistItemWeights.
+     */
+    data: XOR<WatchlistItemWeightUpdateManyMutationInput, WatchlistItemWeightUncheckedUpdateManyInput>
+    /**
+     * Filter which WatchlistItemWeights to update
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * Limit how many WatchlistItemWeights to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WatchlistItemWeight upsert
+   */
+  export type WatchlistItemWeightUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WatchlistItemWeight to update in case it exists.
+     */
+    where: WatchlistItemWeightWhereUniqueInput
+    /**
+     * In case the WatchlistItemWeight found by the `where` argument doesn't exist, create a new WatchlistItemWeight with this data.
+     */
+    create: XOR<WatchlistItemWeightCreateInput, WatchlistItemWeightUncheckedCreateInput>
+    /**
+     * In case the WatchlistItemWeight was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WatchlistItemWeightUpdateInput, WatchlistItemWeightUncheckedUpdateInput>
+  }
+
+  /**
+   * WatchlistItemWeight delete
+   */
+  export type WatchlistItemWeightDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
+    /**
+     * Filter which WatchlistItemWeight to delete.
+     */
+    where: WatchlistItemWeightWhereUniqueInput
+  }
+
+  /**
+   * WatchlistItemWeight deleteMany
+   */
+  export type WatchlistItemWeightDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WatchlistItemWeights to delete
+     */
+    where?: WatchlistItemWeightWhereInput
+    /**
+     * Limit how many WatchlistItemWeights to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WatchlistItemWeight without action
+   */
+  export type WatchlistItemWeightDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WatchlistItemWeight
+     */
+    select?: WatchlistItemWeightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WatchlistItemWeight
+     */
+    omit?: WatchlistItemWeightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WatchlistItemWeightInclude<ExtArgs> | null
   }
 
 
@@ -13299,6 +14601,18 @@ export namespace Prisma {
   };
 
   export type WatchlistItemScalarFieldEnum = (typeof WatchlistItemScalarFieldEnum)[keyof typeof WatchlistItemScalarFieldEnum]
+
+
+  export const WatchlistItemWeightScalarFieldEnum: {
+    id: 'id',
+    watchlistItemId: 'watchlistItemId',
+    userId: 'userId',
+    weight: 'weight',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WatchlistItemWeightScalarFieldEnum = (typeof WatchlistItemWeightScalarFieldEnum)[keyof typeof WatchlistItemWeightScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -13609,6 +14923,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     userFeatures?: UserFeatureListRelationFilter
     watchlistItems?: WatchlistItemListRelationFilter
+    watchlistItemWeights?: WatchlistItemWeightListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -13624,6 +14939,7 @@ export namespace Prisma {
     sessions?: SessionOrderByRelationAggregateInput
     userFeatures?: UserFeatureOrderByRelationAggregateInput
     watchlistItems?: WatchlistItemOrderByRelationAggregateInput
+    watchlistItemWeights?: WatchlistItemWeightOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -13642,6 +14958,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     userFeatures?: UserFeatureListRelationFilter
     watchlistItems?: WatchlistItemListRelationFilter
+    watchlistItemWeights?: WatchlistItemWeightListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14081,6 +15398,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"WatchlistItem"> | Date | string
     addedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     watchlist?: XOR<WatchlistScalarRelationFilter, WatchlistWhereInput>
+    weights?: WatchlistItemWeightListRelationFilter
   }
 
   export type WatchlistItemOrderByWithRelationInput = {
@@ -14102,6 +15420,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     addedBy?: UserOrderByWithRelationInput
     watchlist?: WatchlistOrderByWithRelationInput
+    weights?: WatchlistItemWeightOrderByRelationAggregateInput
   }
 
   export type WatchlistItemWhereUniqueInput = Prisma.AtLeast<{
@@ -14127,6 +15446,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"WatchlistItem"> | Date | string
     addedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     watchlist?: XOR<WatchlistScalarRelationFilter, WatchlistWhereInput>
+    weights?: WatchlistItemWeightListRelationFilter
   }, "id" | "watchlistId_tmdbId">
 
   export type WatchlistItemOrderByWithAggregationInput = {
@@ -14173,6 +15493,72 @@ export namespace Prisma {
     addedById?: StringWithAggregatesFilter<"WatchlistItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"WatchlistItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WatchlistItem"> | Date | string
+  }
+
+  export type WatchlistItemWeightWhereInput = {
+    AND?: WatchlistItemWeightWhereInput | WatchlistItemWeightWhereInput[]
+    OR?: WatchlistItemWeightWhereInput[]
+    NOT?: WatchlistItemWeightWhereInput | WatchlistItemWeightWhereInput[]
+    id?: StringFilter<"WatchlistItemWeight"> | string
+    watchlistItemId?: StringFilter<"WatchlistItemWeight"> | string
+    userId?: StringFilter<"WatchlistItemWeight"> | string
+    weight?: IntFilter<"WatchlistItemWeight"> | number
+    createdAt?: DateTimeFilter<"WatchlistItemWeight"> | Date | string
+    updatedAt?: DateTimeFilter<"WatchlistItemWeight"> | Date | string
+    watchlistItem?: XOR<WatchlistItemScalarRelationFilter, WatchlistItemWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type WatchlistItemWeightOrderByWithRelationInput = {
+    id?: SortOrder
+    watchlistItemId?: SortOrder
+    userId?: SortOrder
+    weight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    watchlistItem?: WatchlistItemOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type WatchlistItemWeightWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    watchlistItemId_userId?: WatchlistItemWeightWatchlistItemIdUserIdCompoundUniqueInput
+    AND?: WatchlistItemWeightWhereInput | WatchlistItemWeightWhereInput[]
+    OR?: WatchlistItemWeightWhereInput[]
+    NOT?: WatchlistItemWeightWhereInput | WatchlistItemWeightWhereInput[]
+    watchlistItemId?: StringFilter<"WatchlistItemWeight"> | string
+    userId?: StringFilter<"WatchlistItemWeight"> | string
+    weight?: IntFilter<"WatchlistItemWeight"> | number
+    createdAt?: DateTimeFilter<"WatchlistItemWeight"> | Date | string
+    updatedAt?: DateTimeFilter<"WatchlistItemWeight"> | Date | string
+    watchlistItem?: XOR<WatchlistItemScalarRelationFilter, WatchlistItemWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "watchlistItemId_userId">
+
+  export type WatchlistItemWeightOrderByWithAggregationInput = {
+    id?: SortOrder
+    watchlistItemId?: SortOrder
+    userId?: SortOrder
+    weight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WatchlistItemWeightCountOrderByAggregateInput
+    _avg?: WatchlistItemWeightAvgOrderByAggregateInput
+    _max?: WatchlistItemWeightMaxOrderByAggregateInput
+    _min?: WatchlistItemWeightMinOrderByAggregateInput
+    _sum?: WatchlistItemWeightSumOrderByAggregateInput
+  }
+
+  export type WatchlistItemWeightScalarWhereWithAggregatesInput = {
+    AND?: WatchlistItemWeightScalarWhereWithAggregatesInput | WatchlistItemWeightScalarWhereWithAggregatesInput[]
+    OR?: WatchlistItemWeightScalarWhereWithAggregatesInput[]
+    NOT?: WatchlistItemWeightScalarWhereWithAggregatesInput | WatchlistItemWeightScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WatchlistItemWeight"> | string
+    watchlistItemId?: StringWithAggregatesFilter<"WatchlistItemWeight"> | string
+    userId?: StringWithAggregatesFilter<"WatchlistItemWeight"> | string
+    weight?: IntWithAggregatesFilter<"WatchlistItemWeight"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"WatchlistItemWeight"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WatchlistItemWeight"> | Date | string
   }
 
   export type AccountCreateInput = {
@@ -14347,6 +15733,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -14362,6 +15749,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -14377,6 +15765,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -14392,6 +15781,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -14843,6 +16233,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     addedBy: UserCreateNestedOneWithoutWatchlistItemsInput
     watchlist: WatchlistCreateNestedOneWithoutItemsInput
+    weights?: WatchlistItemWeightCreateNestedManyWithoutWatchlistItemInput
   }
 
   export type WatchlistItemUncheckedCreateInput = {
@@ -14862,6 +16253,7 @@ export namespace Prisma {
     addedById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    weights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutWatchlistItemInput
   }
 
   export type WatchlistItemUpdateInput = {
@@ -14881,6 +16273,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addedBy?: UserUpdateOneRequiredWithoutWatchlistItemsNestedInput
     watchlist?: WatchlistUpdateOneRequiredWithoutItemsNestedInput
+    weights?: WatchlistItemWeightUpdateManyWithoutWatchlistItemNestedInput
   }
 
   export type WatchlistItemUncheckedUpdateInput = {
@@ -14900,6 +16293,7 @@ export namespace Prisma {
     addedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    weights?: WatchlistItemWeightUncheckedUpdateManyWithoutWatchlistItemNestedInput
   }
 
   export type WatchlistItemCreateManyInput = {
@@ -14953,6 +16347,67 @@ export namespace Prisma {
     overview?: NullableStringFieldUpdateOperationsInput | string | null
     watchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightCreateInput = {
+    id?: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    watchlistItem: WatchlistItemCreateNestedOneWithoutWeightsInput
+    user: UserCreateNestedOneWithoutWatchlistItemWeightsInput
+  }
+
+  export type WatchlistItemWeightUncheckedCreateInput = {
+    id?: string
+    watchlistItemId: string
+    userId: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemWeightUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    watchlistItem?: WatchlistItemUpdateOneRequiredWithoutWeightsNestedInput
+    user?: UserUpdateOneRequiredWithoutWatchlistItemWeightsNestedInput
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    watchlistItemId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightCreateManyInput = {
+    id?: string
+    watchlistItemId: string
+    userId: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemWeightUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    watchlistItemId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15222,6 +16677,12 @@ export namespace Prisma {
     none?: WatchlistItemWhereInput
   }
 
+  export type WatchlistItemWeightListRelationFilter = {
+    every?: WatchlistItemWeightWhereInput
+    some?: WatchlistItemWeightWhereInput
+    none?: WatchlistItemWeightWhereInput
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -15247,6 +16708,10 @@ export namespace Prisma {
   }
 
   export type WatchlistItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WatchlistItemWeightOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15658,6 +17123,51 @@ export namespace Prisma {
     _max?: NestedEnumWatchlistItemStatusFilter<$PrismaModel>
   }
 
+  export type WatchlistItemScalarRelationFilter = {
+    is?: WatchlistItemWhereInput
+    isNot?: WatchlistItemWhereInput
+  }
+
+  export type WatchlistItemWeightWatchlistItemIdUserIdCompoundUniqueInput = {
+    watchlistItemId: string
+    userId: string
+  }
+
+  export type WatchlistItemWeightCountOrderByAggregateInput = {
+    id?: SortOrder
+    watchlistItemId?: SortOrder
+    userId?: SortOrder
+    weight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WatchlistItemWeightAvgOrderByAggregateInput = {
+    weight?: SortOrder
+  }
+
+  export type WatchlistItemWeightMaxOrderByAggregateInput = {
+    id?: SortOrder
+    watchlistItemId?: SortOrder
+    userId?: SortOrder
+    weight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WatchlistItemWeightMinOrderByAggregateInput = {
+    id?: SortOrder
+    watchlistItemId?: SortOrder
+    userId?: SortOrder
+    weight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WatchlistItemWeightSumOrderByAggregateInput = {
+    weight?: SortOrder
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -15755,6 +17265,13 @@ export namespace Prisma {
     connect?: WatchlistItemWhereUniqueInput | WatchlistItemWhereUniqueInput[]
   }
 
+  export type WatchlistItemWeightCreateNestedManyWithoutUserInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutUserInput, WatchlistItemWeightUncheckedCreateWithoutUserInput> | WatchlistItemWeightCreateWithoutUserInput[] | WatchlistItemWeightUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutUserInput | WatchlistItemWeightCreateOrConnectWithoutUserInput[]
+    createMany?: WatchlistItemWeightCreateManyUserInputEnvelope
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -15802,6 +17319,13 @@ export namespace Prisma {
     connectOrCreate?: WatchlistItemCreateOrConnectWithoutAddedByInput | WatchlistItemCreateOrConnectWithoutAddedByInput[]
     createMany?: WatchlistItemCreateManyAddedByInputEnvelope
     connect?: WatchlistItemWhereUniqueInput | WatchlistItemWhereUniqueInput[]
+  }
+
+  export type WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutUserInput, WatchlistItemWeightUncheckedCreateWithoutUserInput> | WatchlistItemWeightCreateWithoutUserInput[] | WatchlistItemWeightUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutUserInput | WatchlistItemWeightCreateOrConnectWithoutUserInput[]
+    createMany?: WatchlistItemWeightCreateManyUserInputEnvelope
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -15906,6 +17430,20 @@ export namespace Prisma {
     deleteMany?: WatchlistItemScalarWhereInput | WatchlistItemScalarWhereInput[]
   }
 
+  export type WatchlistItemWeightUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutUserInput, WatchlistItemWeightUncheckedCreateWithoutUserInput> | WatchlistItemWeightCreateWithoutUserInput[] | WatchlistItemWeightUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutUserInput | WatchlistItemWeightCreateOrConnectWithoutUserInput[]
+    upsert?: WatchlistItemWeightUpsertWithWhereUniqueWithoutUserInput | WatchlistItemWeightUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WatchlistItemWeightCreateManyUserInputEnvelope
+    set?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    disconnect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    delete?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    update?: WatchlistItemWeightUpdateWithWhereUniqueWithoutUserInput | WatchlistItemWeightUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WatchlistItemWeightUpdateManyWithWhereWithoutUserInput | WatchlistItemWeightUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WatchlistItemWeightScalarWhereInput | WatchlistItemWeightScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -16002,6 +17540,20 @@ export namespace Prisma {
     update?: WatchlistItemUpdateWithWhereUniqueWithoutAddedByInput | WatchlistItemUpdateWithWhereUniqueWithoutAddedByInput[]
     updateMany?: WatchlistItemUpdateManyWithWhereWithoutAddedByInput | WatchlistItemUpdateManyWithWhereWithoutAddedByInput[]
     deleteMany?: WatchlistItemScalarWhereInput | WatchlistItemScalarWhereInput[]
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutUserInput, WatchlistItemWeightUncheckedCreateWithoutUserInput> | WatchlistItemWeightCreateWithoutUserInput[] | WatchlistItemWeightUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutUserInput | WatchlistItemWeightCreateOrConnectWithoutUserInput[]
+    upsert?: WatchlistItemWeightUpsertWithWhereUniqueWithoutUserInput | WatchlistItemWeightUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WatchlistItemWeightCreateManyUserInputEnvelope
+    set?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    disconnect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    delete?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    update?: WatchlistItemWeightUpdateWithWhereUniqueWithoutUserInput | WatchlistItemWeightUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WatchlistItemWeightUpdateManyWithWhereWithoutUserInput | WatchlistItemWeightUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WatchlistItemWeightScalarWhereInput | WatchlistItemWeightScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutUserFeaturesInput = {
@@ -16284,6 +17836,20 @@ export namespace Prisma {
     connect?: WatchlistWhereUniqueInput
   }
 
+  export type WatchlistItemWeightCreateNestedManyWithoutWatchlistItemInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput> | WatchlistItemWeightCreateWithoutWatchlistItemInput[] | WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput | WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput[]
+    createMany?: WatchlistItemWeightCreateManyWatchlistItemInputEnvelope
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+  }
+
+  export type WatchlistItemWeightUncheckedCreateNestedManyWithoutWatchlistItemInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput> | WatchlistItemWeightCreateWithoutWatchlistItemInput[] | WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput | WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput[]
+    createMany?: WatchlistItemWeightCreateManyWatchlistItemInputEnvelope
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -16310,6 +17876,62 @@ export namespace Prisma {
     upsert?: WatchlistUpsertWithoutItemsInput
     connect?: WatchlistWhereUniqueInput
     update?: XOR<XOR<WatchlistUpdateToOneWithWhereWithoutItemsInput, WatchlistUpdateWithoutItemsInput>, WatchlistUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type WatchlistItemWeightUpdateManyWithoutWatchlistItemNestedInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput> | WatchlistItemWeightCreateWithoutWatchlistItemInput[] | WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput | WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput[]
+    upsert?: WatchlistItemWeightUpsertWithWhereUniqueWithoutWatchlistItemInput | WatchlistItemWeightUpsertWithWhereUniqueWithoutWatchlistItemInput[]
+    createMany?: WatchlistItemWeightCreateManyWatchlistItemInputEnvelope
+    set?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    disconnect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    delete?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    update?: WatchlistItemWeightUpdateWithWhereUniqueWithoutWatchlistItemInput | WatchlistItemWeightUpdateWithWhereUniqueWithoutWatchlistItemInput[]
+    updateMany?: WatchlistItemWeightUpdateManyWithWhereWithoutWatchlistItemInput | WatchlistItemWeightUpdateManyWithWhereWithoutWatchlistItemInput[]
+    deleteMany?: WatchlistItemWeightScalarWhereInput | WatchlistItemWeightScalarWhereInput[]
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateManyWithoutWatchlistItemNestedInput = {
+    create?: XOR<WatchlistItemWeightCreateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput> | WatchlistItemWeightCreateWithoutWatchlistItemInput[] | WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput[]
+    connectOrCreate?: WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput | WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput[]
+    upsert?: WatchlistItemWeightUpsertWithWhereUniqueWithoutWatchlistItemInput | WatchlistItemWeightUpsertWithWhereUniqueWithoutWatchlistItemInput[]
+    createMany?: WatchlistItemWeightCreateManyWatchlistItemInputEnvelope
+    set?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    disconnect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    delete?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    connect?: WatchlistItemWeightWhereUniqueInput | WatchlistItemWeightWhereUniqueInput[]
+    update?: WatchlistItemWeightUpdateWithWhereUniqueWithoutWatchlistItemInput | WatchlistItemWeightUpdateWithWhereUniqueWithoutWatchlistItemInput[]
+    updateMany?: WatchlistItemWeightUpdateManyWithWhereWithoutWatchlistItemInput | WatchlistItemWeightUpdateManyWithWhereWithoutWatchlistItemInput[]
+    deleteMany?: WatchlistItemWeightScalarWhereInput | WatchlistItemWeightScalarWhereInput[]
+  }
+
+  export type WatchlistItemCreateNestedOneWithoutWeightsInput = {
+    create?: XOR<WatchlistItemCreateWithoutWeightsInput, WatchlistItemUncheckedCreateWithoutWeightsInput>
+    connectOrCreate?: WatchlistItemCreateOrConnectWithoutWeightsInput
+    connect?: WatchlistItemWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutWatchlistItemWeightsInput = {
+    create?: XOR<UserCreateWithoutWatchlistItemWeightsInput, UserUncheckedCreateWithoutWatchlistItemWeightsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWatchlistItemWeightsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type WatchlistItemUpdateOneRequiredWithoutWeightsNestedInput = {
+    create?: XOR<WatchlistItemCreateWithoutWeightsInput, WatchlistItemUncheckedCreateWithoutWeightsInput>
+    connectOrCreate?: WatchlistItemCreateOrConnectWithoutWeightsInput
+    upsert?: WatchlistItemUpsertWithoutWeightsInput
+    connect?: WatchlistItemWhereUniqueInput
+    update?: XOR<XOR<WatchlistItemUpdateToOneWithWhereWithoutWeightsInput, WatchlistItemUpdateWithoutWeightsInput>, WatchlistItemUncheckedUpdateWithoutWeightsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutWatchlistItemWeightsNestedInput = {
+    create?: XOR<UserCreateWithoutWatchlistItemWeightsInput, UserUncheckedCreateWithoutWatchlistItemWeightsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWatchlistItemWeightsInput
+    upsert?: UserUpsertWithoutWatchlistItemWeightsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWatchlistItemWeightsInput, UserUpdateWithoutWatchlistItemWeightsInput>, UserUncheckedUpdateWithoutWatchlistItemWeightsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -16580,6 +18202,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -16594,6 +18217,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -16624,6 +18248,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -16638,6 +18263,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -16652,6 +18278,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceCreateNestedManyWithoutOwnerInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -16666,6 +18293,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUncheckedCreateNestedManyWithoutOwnerInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -16696,6 +18324,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUpdateManyWithoutOwnerNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -16710,6 +18339,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUncheckedUpdateManyWithoutOwnerNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -16910,6 +18540,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     watchlist: WatchlistCreateNestedOneWithoutItemsInput
+    weights?: WatchlistItemWeightCreateNestedManyWithoutWatchlistItemInput
   }
 
   export type WatchlistItemUncheckedCreateWithoutAddedByInput = {
@@ -16928,6 +18559,7 @@ export namespace Prisma {
     watchedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    weights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutWatchlistItemInput
   }
 
   export type WatchlistItemCreateOrConnectWithoutAddedByInput = {
@@ -16937,6 +18569,32 @@ export namespace Prisma {
 
   export type WatchlistItemCreateManyAddedByInputEnvelope = {
     data: WatchlistItemCreateManyAddedByInput | WatchlistItemCreateManyAddedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WatchlistItemWeightCreateWithoutUserInput = {
+    id?: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    watchlistItem: WatchlistItemCreateNestedOneWithoutWeightsInput
+  }
+
+  export type WatchlistItemWeightUncheckedCreateWithoutUserInput = {
+    id?: string
+    watchlistItemId: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemWeightCreateOrConnectWithoutUserInput = {
+    where: WatchlistItemWeightWhereUniqueInput
+    create: XOR<WatchlistItemWeightCreateWithoutUserInput, WatchlistItemWeightUncheckedCreateWithoutUserInput>
+  }
+
+  export type WatchlistItemWeightCreateManyUserInputEnvelope = {
+    data: WatchlistItemWeightCreateManyUserInput | WatchlistItemWeightCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -17156,6 +18814,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"WatchlistItem"> | Date | string
   }
 
+  export type WatchlistItemWeightUpsertWithWhereUniqueWithoutUserInput = {
+    where: WatchlistItemWeightWhereUniqueInput
+    update: XOR<WatchlistItemWeightUpdateWithoutUserInput, WatchlistItemWeightUncheckedUpdateWithoutUserInput>
+    create: XOR<WatchlistItemWeightCreateWithoutUserInput, WatchlistItemWeightUncheckedCreateWithoutUserInput>
+  }
+
+  export type WatchlistItemWeightUpdateWithWhereUniqueWithoutUserInput = {
+    where: WatchlistItemWeightWhereUniqueInput
+    data: XOR<WatchlistItemWeightUpdateWithoutUserInput, WatchlistItemWeightUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WatchlistItemWeightUpdateManyWithWhereWithoutUserInput = {
+    where: WatchlistItemWeightScalarWhereInput
+    data: XOR<WatchlistItemWeightUpdateManyMutationInput, WatchlistItemWeightUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type WatchlistItemWeightScalarWhereInput = {
+    AND?: WatchlistItemWeightScalarWhereInput | WatchlistItemWeightScalarWhereInput[]
+    OR?: WatchlistItemWeightScalarWhereInput[]
+    NOT?: WatchlistItemWeightScalarWhereInput | WatchlistItemWeightScalarWhereInput[]
+    id?: StringFilter<"WatchlistItemWeight"> | string
+    watchlistItemId?: StringFilter<"WatchlistItemWeight"> | string
+    userId?: StringFilter<"WatchlistItemWeight"> | string
+    weight?: IntFilter<"WatchlistItemWeight"> | number
+    createdAt?: DateTimeFilter<"WatchlistItemWeight"> | Date | string
+    updatedAt?: DateTimeFilter<"WatchlistItemWeight"> | Date | string
+  }
+
   export type UserCreateWithoutUserFeaturesInput = {
     id?: string
     name?: string | null
@@ -17168,6 +18854,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceCreateNestedManyWithoutOwnerInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUserFeaturesInput = {
@@ -17182,6 +18869,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUncheckedCreateNestedManyWithoutOwnerInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUserFeaturesInput = {
@@ -17212,6 +18900,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUpdateManyWithoutOwnerNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUserFeaturesInput = {
@@ -17226,6 +18915,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUncheckedUpdateManyWithoutOwnerNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FeatureInviteCreateWithoutFeatureInstanceInput = {
@@ -17302,6 +18992,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedFeatureInstancesInput = {
@@ -17316,6 +19007,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedFeatureInstancesInput = {
@@ -17403,6 +19095,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedFeatureInstancesInput = {
@@ -17417,6 +19110,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WatchlistUpsertWithoutFeatureInstanceInput = {
@@ -17487,6 +19181,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeatureMembershipsInput = {
@@ -17501,6 +19196,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeatureMembershipsInput = {
@@ -17562,6 +19258,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeatureMembershipsInput = {
@@ -17576,6 +19273,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FeatureInstanceCreateWithoutInvitesInput = {
@@ -17615,6 +19313,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeatureInvitesInput = {
@@ -17629,6 +19328,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
     watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeatureInvitesInput = {
@@ -17690,6 +19390,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeatureInvitesInput = {
@@ -17704,6 +19405,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
     watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FeatureInstanceCreateWithoutWatchlistInput = {
@@ -17747,6 +19449,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     addedBy: UserCreateNestedOneWithoutWatchlistItemsInput
+    weights?: WatchlistItemWeightCreateNestedManyWithoutWatchlistItemInput
   }
 
   export type WatchlistItemUncheckedCreateWithoutWatchlistInput = {
@@ -17765,6 +19468,7 @@ export namespace Prisma {
     addedById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    weights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutWatchlistItemInput
   }
 
   export type WatchlistItemCreateOrConnectWithoutWatchlistInput = {
@@ -17836,6 +19540,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceCreateNestedManyWithoutOwnerInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
+    watchlistItemWeights?: WatchlistItemWeightCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWatchlistItemsInput = {
@@ -17850,6 +19555,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUncheckedCreateNestedManyWithoutOwnerInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWatchlistItemsInput = {
@@ -17882,6 +19588,32 @@ export namespace Prisma {
     create: XOR<WatchlistCreateWithoutItemsInput, WatchlistUncheckedCreateWithoutItemsInput>
   }
 
+  export type WatchlistItemWeightCreateWithoutWatchlistItemInput = {
+    id?: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutWatchlistItemWeightsInput
+  }
+
+  export type WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput = {
+    id?: string
+    userId: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemWeightCreateOrConnectWithoutWatchlistItemInput = {
+    where: WatchlistItemWeightWhereUniqueInput
+    create: XOR<WatchlistItemWeightCreateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput>
+  }
+
+  export type WatchlistItemWeightCreateManyWatchlistItemInputEnvelope = {
+    data: WatchlistItemWeightCreateManyWatchlistItemInput | WatchlistItemWeightCreateManyWatchlistItemInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutWatchlistItemsInput = {
     update: XOR<UserUpdateWithoutWatchlistItemsInput, UserUncheckedUpdateWithoutWatchlistItemsInput>
     create: XOR<UserCreateWithoutWatchlistItemsInput, UserUncheckedCreateWithoutWatchlistItemsInput>
@@ -17905,6 +19637,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUpdateManyWithoutOwnerNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWatchlistItemsInput = {
@@ -17919,6 +19652,7 @@ export namespace Prisma {
     ownedFeatureInstances?: FeatureInstanceUncheckedUpdateManyWithoutOwnerNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+    watchlistItemWeights?: WatchlistItemWeightUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WatchlistUpsertWithoutItemsInput = {
@@ -17950,6 +19684,190 @@ export namespace Prisma {
     mediaType?: EnumWatchlistMediaTypeFieldUpdateOperationsInput | $Enums.WatchlistMediaType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightUpsertWithWhereUniqueWithoutWatchlistItemInput = {
+    where: WatchlistItemWeightWhereUniqueInput
+    update: XOR<WatchlistItemWeightUpdateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedUpdateWithoutWatchlistItemInput>
+    create: XOR<WatchlistItemWeightCreateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedCreateWithoutWatchlistItemInput>
+  }
+
+  export type WatchlistItemWeightUpdateWithWhereUniqueWithoutWatchlistItemInput = {
+    where: WatchlistItemWeightWhereUniqueInput
+    data: XOR<WatchlistItemWeightUpdateWithoutWatchlistItemInput, WatchlistItemWeightUncheckedUpdateWithoutWatchlistItemInput>
+  }
+
+  export type WatchlistItemWeightUpdateManyWithWhereWithoutWatchlistItemInput = {
+    where: WatchlistItemWeightScalarWhereInput
+    data: XOR<WatchlistItemWeightUpdateManyMutationInput, WatchlistItemWeightUncheckedUpdateManyWithoutWatchlistItemInput>
+  }
+
+  export type WatchlistItemCreateWithoutWeightsInput = {
+    id?: string
+    tmdbId: number
+    position: number
+    status?: $Enums.WatchlistItemStatus
+    note?: string
+    title: string
+    creditNames?: string | null
+    year?: number | null
+    posterPath?: string | null
+    backdropPath?: string | null
+    overview?: string | null
+    watchedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addedBy: UserCreateNestedOneWithoutWatchlistItemsInput
+    watchlist: WatchlistCreateNestedOneWithoutItemsInput
+  }
+
+  export type WatchlistItemUncheckedCreateWithoutWeightsInput = {
+    id?: string
+    watchlistId: string
+    tmdbId: number
+    position: number
+    status?: $Enums.WatchlistItemStatus
+    note?: string
+    title: string
+    creditNames?: string | null
+    year?: number | null
+    posterPath?: string | null
+    backdropPath?: string | null
+    overview?: string | null
+    watchedAt?: Date | string | null
+    addedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemCreateOrConnectWithoutWeightsInput = {
+    where: WatchlistItemWhereUniqueInput
+    create: XOR<WatchlistItemCreateWithoutWeightsInput, WatchlistItemUncheckedCreateWithoutWeightsInput>
+  }
+
+  export type UserCreateWithoutWatchlistItemWeightsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    featureInvites?: FeatureInviteCreateNestedManyWithoutInviterInput
+    featureMemberships?: FeatureMembershipCreateNestedManyWithoutUserInput
+    ownedFeatureInstances?: FeatureInstanceCreateNestedManyWithoutOwnerInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    userFeatures?: UserFeatureCreateNestedManyWithoutUserInput
+    watchlistItems?: WatchlistItemCreateNestedManyWithoutAddedByInput
+  }
+
+  export type UserUncheckedCreateWithoutWatchlistItemWeightsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    featureInvites?: FeatureInviteUncheckedCreateNestedManyWithoutInviterInput
+    featureMemberships?: FeatureMembershipUncheckedCreateNestedManyWithoutUserInput
+    ownedFeatureInstances?: FeatureInstanceUncheckedCreateNestedManyWithoutOwnerInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    userFeatures?: UserFeatureUncheckedCreateNestedManyWithoutUserInput
+    watchlistItems?: WatchlistItemUncheckedCreateNestedManyWithoutAddedByInput
+  }
+
+  export type UserCreateOrConnectWithoutWatchlistItemWeightsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWatchlistItemWeightsInput, UserUncheckedCreateWithoutWatchlistItemWeightsInput>
+  }
+
+  export type WatchlistItemUpsertWithoutWeightsInput = {
+    update: XOR<WatchlistItemUpdateWithoutWeightsInput, WatchlistItemUncheckedUpdateWithoutWeightsInput>
+    create: XOR<WatchlistItemCreateWithoutWeightsInput, WatchlistItemUncheckedCreateWithoutWeightsInput>
+    where?: WatchlistItemWhereInput
+  }
+
+  export type WatchlistItemUpdateToOneWithWhereWithoutWeightsInput = {
+    where?: WatchlistItemWhereInput
+    data: XOR<WatchlistItemUpdateWithoutWeightsInput, WatchlistItemUncheckedUpdateWithoutWeightsInput>
+  }
+
+  export type WatchlistItemUpdateWithoutWeightsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tmdbId?: IntFieldUpdateOperationsInput | number
+    position?: IntFieldUpdateOperationsInput | number
+    status?: EnumWatchlistItemStatusFieldUpdateOperationsInput | $Enums.WatchlistItemStatus
+    note?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    creditNames?: NullableStringFieldUpdateOperationsInput | string | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    posterPath?: NullableStringFieldUpdateOperationsInput | string | null
+    backdropPath?: NullableStringFieldUpdateOperationsInput | string | null
+    overview?: NullableStringFieldUpdateOperationsInput | string | null
+    watchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addedBy?: UserUpdateOneRequiredWithoutWatchlistItemsNestedInput
+    watchlist?: WatchlistUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type WatchlistItemUncheckedUpdateWithoutWeightsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    watchlistId?: StringFieldUpdateOperationsInput | string
+    tmdbId?: IntFieldUpdateOperationsInput | number
+    position?: IntFieldUpdateOperationsInput | number
+    status?: EnumWatchlistItemStatusFieldUpdateOperationsInput | $Enums.WatchlistItemStatus
+    note?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    creditNames?: NullableStringFieldUpdateOperationsInput | string | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    posterPath?: NullableStringFieldUpdateOperationsInput | string | null
+    backdropPath?: NullableStringFieldUpdateOperationsInput | string | null
+    overview?: NullableStringFieldUpdateOperationsInput | string | null
+    watchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutWatchlistItemWeightsInput = {
+    update: XOR<UserUpdateWithoutWatchlistItemWeightsInput, UserUncheckedUpdateWithoutWatchlistItemWeightsInput>
+    create: XOR<UserCreateWithoutWatchlistItemWeightsInput, UserUncheckedCreateWithoutWatchlistItemWeightsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWatchlistItemWeightsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWatchlistItemWeightsInput, UserUncheckedUpdateWithoutWatchlistItemWeightsInput>
+  }
+
+  export type UserUpdateWithoutWatchlistItemWeightsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    featureInvites?: FeatureInviteUpdateManyWithoutInviterNestedInput
+    featureMemberships?: FeatureMembershipUpdateManyWithoutUserNestedInput
+    ownedFeatureInstances?: FeatureInstanceUpdateManyWithoutOwnerNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    userFeatures?: UserFeatureUpdateManyWithoutUserNestedInput
+    watchlistItems?: WatchlistItemUpdateManyWithoutAddedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWatchlistItemWeightsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    featureInvites?: FeatureInviteUncheckedUpdateManyWithoutInviterNestedInput
+    featureMemberships?: FeatureMembershipUncheckedUpdateManyWithoutUserNestedInput
+    ownedFeatureInstances?: FeatureInstanceUncheckedUpdateManyWithoutOwnerNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    userFeatures?: UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+    watchlistItems?: WatchlistItemUncheckedUpdateManyWithoutAddedByNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -18024,6 +19942,14 @@ export namespace Prisma {
     backdropPath?: string | null
     overview?: string | null
     watchedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemWeightCreateManyUserInput = {
+    id?: string
+    watchlistItemId: string
+    weight: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18224,6 +20150,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     watchlist?: WatchlistUpdateOneRequiredWithoutItemsNestedInput
+    weights?: WatchlistItemWeightUpdateManyWithoutWatchlistItemNestedInput
   }
 
   export type WatchlistItemUncheckedUpdateWithoutAddedByInput = {
@@ -18242,6 +20169,7 @@ export namespace Prisma {
     watchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    weights?: WatchlistItemWeightUncheckedUpdateManyWithoutWatchlistItemNestedInput
   }
 
   export type WatchlistItemUncheckedUpdateManyWithoutAddedByInput = {
@@ -18258,6 +20186,30 @@ export namespace Prisma {
     backdropPath?: NullableStringFieldUpdateOperationsInput | string | null
     overview?: NullableStringFieldUpdateOperationsInput | string | null
     watchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    watchlistItem?: WatchlistItemUpdateOneRequiredWithoutWeightsNestedInput
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    watchlistItemId?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    watchlistItemId?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18380,6 +20332,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addedBy?: UserUpdateOneRequiredWithoutWatchlistItemsNestedInput
+    weights?: WatchlistItemWeightUpdateManyWithoutWatchlistItemNestedInput
   }
 
   export type WatchlistItemUncheckedUpdateWithoutWatchlistInput = {
@@ -18398,6 +20351,7 @@ export namespace Prisma {
     addedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    weights?: WatchlistItemWeightUncheckedUpdateManyWithoutWatchlistItemNestedInput
   }
 
   export type WatchlistItemUncheckedUpdateManyWithoutWatchlistInput = {
@@ -18414,6 +20368,38 @@ export namespace Prisma {
     overview?: NullableStringFieldUpdateOperationsInput | string | null
     watchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightCreateManyWatchlistItemInput = {
+    id?: string
+    userId: string
+    weight: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WatchlistItemWeightUpdateWithoutWatchlistItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWatchlistItemWeightsNestedInput
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateWithoutWatchlistItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WatchlistItemWeightUncheckedUpdateManyWithoutWatchlistItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    weight?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -228,6 +228,15 @@ exports.Prisma.WatchlistItemScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WatchlistItemWeightScalarFieldEnum = {
+  id: 'id',
+  watchlistItemId: 'watchlistItemId',
+  userId: 'userId',
+  weight: 'weight',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -271,7 +280,8 @@ exports.Prisma.ModelName = {
   FeatureMembership: 'FeatureMembership',
   FeatureInvite: 'FeatureInvite',
   Watchlist: 'Watchlist',
-  WatchlistItem: 'WatchlistItem'
+  WatchlistItem: 'WatchlistItem',
+  WatchlistItemWeight: 'WatchlistItemWeight'
 };
 
 /**
