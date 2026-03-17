@@ -135,9 +135,8 @@ export function WatchlistsHomeClient() {
     },
   });
 
-  const hasWatchlists = (watchlistsQuery.data?.length ?? 0) > 0;
   const showEmptyState =
-    watchlistsQuery.data && watchlistsQuery.data.length === 0;
+    watchlistsQuery.data?.length === 0;
 
   return (
     <div className="space-y-8">

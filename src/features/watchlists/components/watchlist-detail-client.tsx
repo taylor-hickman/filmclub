@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { TmdbBackdrop, TmdbPoster } from "~/app/_components/tmdb-media";
 import {
-  getAddMediaHeading,
   getCreditPrefix,
   getEmptyQueueLabel,
   getMissingCreditLabel,
@@ -177,7 +176,7 @@ export function WatchlistDetailClient({
     (searchReady && trimmedSearchInput !== searchQuery) ||
     mediaSearchQuery.isFetching;
 
-  const hasBackdrop = !!(leadItem?.backdropPath || leadItem?.posterPath);
+  const hasBackdrop = !!(leadItem?.backdropPath ?? leadItem?.posterPath);
 
   const moveItem = (itemId: string, direction: "up" | "down") => {
     const currentIndex = orderedItemIds.indexOf(itemId);
@@ -598,7 +597,7 @@ export function WatchlistDetailClient({
                           <button
                             type="button"
                             onClick={() =>
-                              updateItem
+                              void updateItem
                                 .mutateAsync({
                                   itemId: item.id,
                                   status:
@@ -657,7 +656,7 @@ export function WatchlistDetailClient({
                             <button
                               type="button"
                               onClick={() =>
-                                updateItem
+                                void updateItem
                                   .mutateAsync({
                                     itemId: item.id,
                                     note: noteDrafts[item.id] ?? "",
@@ -773,11 +772,11 @@ export function WatchlistDetailClient({
                   className="mt-5 space-y-4"
                   onSubmit={(event) => {
                     event.preventDefault();
-                    updateWatchlist
+                    void updateWatchlist
                       .mutateAsync({
                         watchlistId,
                         name: draftName,
-                        description: draftDescription || undefined,
+                        description: draftDescription ?? undefined,
                       })
                       .then(() => showFeedback("settings", "Saved"));
                   }}
@@ -810,9 +809,9 @@ export function WatchlistDetailClient({
                     >
                       Save
                     </button>
-                    {feedbackMap["settings"] ? (
+                    {feedbackMap.settings ? (
                       <span className="text-xs text-emerald-400">
-                        {feedbackMap["settings"]}
+                        {feedbackMap.settings}
                       </span>
                     ) : null}
                   </div>
@@ -881,9 +880,9 @@ export function WatchlistDetailClient({
                   >
                     Send invite
                   </button>
-                  {feedbackMap["invite"] ? (
+                  {feedbackMap.invite ? (
                     <span className="text-xs text-emerald-400">
-                      {feedbackMap["invite"]}
+                      {feedbackMap.invite}
                     </span>
                   ) : null}
                 </div>
