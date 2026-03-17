@@ -49,7 +49,6 @@ export function WatchlistDetailClient({
   const [inviteEmail, setInviteEmail] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchFocused, setSearchFocused] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
@@ -173,8 +172,6 @@ export function WatchlistDetailClient({
   const trimmedSearchInput = searchInput.trim();
   const searchReady = trimmedSearchInput.length >= 2;
   const searchResults = mediaSearchQuery.data ?? [];
-  const suggestionResults = searchResults.slice(0, 5);
-  const dropdownOpen = searchFocused && searchReady;
   const isSearchPending =
     (searchReady && trimmedSearchInput !== searchQuery) ||
     mediaSearchQuery.isFetching;
@@ -542,29 +539,41 @@ export function WatchlistDetailClient({
 
         {/* Queue section with integrated search */}
         <section className="rounded-2xl border border-white/10 bg-white/5 p-3 sm:rounded-3xl sm:p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="text-xl font-semibold text-white">Queue</h2>
-            <div className="relative flex-1 sm:max-w-sm">
-              <div className="relative flex items-center">
+          <div className="sticky top-0 z-10 bg-[#0a0a0a] pb-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-xl font-semibold text-white">Queue</h2>
+              <div className="relative flex-1 sm:max-w-sm">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-stone-500"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
                 <input
                   value={searchInput}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => {
-                    window.setTimeout(() => setSearchFocused(false), 120);
-                  }}
                   onChange={(event) => setSearchInput(event.target.value)}
                   onKeyDown={(event) => {
-                    if (!dropdownOpen || suggestionResults.length === 0) {
-                      if (event.key === "Escape") {
-                        setSearchFocused(false);
-                      }
+                    if (event.key === "Escape") {
+                      setSearchInput("");
+                      setSearchQuery("");
+                      (event.target as HTMLInputElement).blur();
                       return;
                     }
+
+                    if (!searchReady || searchResults.length === 0) return;
 
                     if (event.key === "ArrowDown") {
                       event.preventDefault();
                       setActiveSuggestionIndex((current) =>
-                        current >= suggestionResults.length - 1
+                        current >= searchResults.length - 1
                           ? 0
                           : current + 1,
                       );
@@ -574,181 +583,121 @@ export function WatchlistDetailClient({
                       event.preventDefault();
                       setActiveSuggestionIndex((current) =>
                         current <= 0
-                          ? suggestionResults.length - 1
+                          ? searchResults.length - 1
                           : current - 1,
                       );
                     }
 
-                    if (event.key === "Escape") {
+                    if (event.key === "Enter") {
                       event.preventDefault();
-                      setSearchFocused(false);
+                      const result = searchResults[activeSuggestionIndex];
+                      if (
+                        result &&
+                        !existingTmdbIds.has(result.tmdbId) &&
+                        !addItem.isPending
+                      ) {
+                        addItem.mutate({
+                          watchlistId,
+                          tmdbId: result.tmdbId,
+                        });
+                      }
                     }
                   }}
-                  className="w-full rounded-xl border border-white/10 bg-stone-950 px-3.5 py-3 pr-16 text-base text-white transition outline-none focus:border-white/30 sm:rounded-2xl sm:pr-20"
+                  className="w-full rounded-xl border border-white/10 bg-stone-950 py-3 pr-10 pl-10 text-sm text-white transition outline-none focus:border-white/30 sm:rounded-2xl"
                   placeholder={getSearchPlaceholder(mediaType)}
                 />
-
                 {searchInput ? (
                   <button
                     type="button"
                     onClick={() => {
                       setSearchInput("");
                       setSearchQuery("");
-                      setSearchFocused(false);
                     }}
-                    className="absolute right-3 min-h-[36px] rounded-full border border-white/10 px-3 py-1.5 text-xs text-stone-400 transition hover:border-white/25 hover:text-white"
+                    className="absolute top-1/2 right-3 -translate-y-1/2 p-1 text-stone-500 transition hover:text-white"
+                    aria-label="Clear search"
                   >
-                    Clear
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
                   </button>
                 ) : null}
               </div>
-
-              {dropdownOpen ? (
-                <div
-                  onMouseDown={(event) => event.preventDefault()}
-                  className="absolute inset-x-0 top-[calc(100%+0.5rem)] z-20 overflow-hidden rounded-2xl border border-white/10 bg-stone-950/95 shadow-2xl shadow-black/40 backdrop-blur"
-                >
-                  {isSearchPending ? (
-                    <div className="px-4 py-4 text-sm text-stone-400">
-                      Searching TMDB...
-                    </div>
-                  ) : mediaSearchQuery.error ? (
-                    <div className="px-4 py-4 text-sm text-rose-300">
-                      {mediaSearchQuery.error.message}
-                    </div>
-                  ) : suggestionResults.length === 0 ? (
-                    <div className="px-4 py-4 text-sm text-stone-400">
-                      {getSearchEmptyLabel(mediaType)}
-                    </div>
-                  ) : (
-                    <div className="max-h-[60vh] overflow-y-auto p-2 sm:max-h-[22rem]">
-                      {suggestionResults.map((result, index) => {
-                        const alreadyAdded = existingTmdbIds.has(result.tmdbId);
-
-                        return (
-                          <div
-                            key={result.tmdbId}
-                            className={`grid grid-cols-[56px_1fr_auto] items-center gap-3 rounded-xl px-3 py-3 transition ${
-                              index === activeSuggestionIndex
-                                ? "bg-white/10"
-                                : "hover:bg-white/5"
-                            }`}
-                          >
-                            <TmdbPoster
-                              title={result.title}
-                              posterPath={result.posterPath}
-                              backdropPath={result.backdropPath}
-                              size="thumb"
-                              className="aspect-[2/3] rounded-lg"
-                            />
-
-                            <div className="min-w-0">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <p className="truncate font-medium text-white">
-                                  {result.title}
-                                </p>
-                                {result.year ? (
-                                  <span className="text-xs text-stone-500">
-                                    {result.year}
-                                  </span>
-                                ) : null}
-                              </div>
-                              <CreditLine
-                                creditNames={result.creditNames}
-                                mediaType={mediaType}
-                                className="truncate text-sm text-stone-300"
-                              />
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() =>
-                                addItem.mutate({
-                                  watchlistId,
-                                  tmdbId: result.tmdbId,
-                                })
-                              }
-                              disabled={alreadyAdded || addItem.isPending}
-                              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                                alreadyAdded
-                                  ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-100"
-                                  : "border border-white/15 text-white hover:border-white/30"
-                              } disabled:cursor-not-allowed disabled:opacity-70`}
-                            >
-                              {alreadyAdded
-                                ? "Added"
-                                : addItem.isPending
-                                  ? "Adding..."
-                                  : "Add"}
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              ) : null}
             </div>
           </div>
 
-          {/* Search results — only visible when actively searching */}
+          {/* Inline search results */}
           {searchReady ? (
-            <div className="mt-6 space-y-4">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold tracking-[0.2em] text-stone-500 uppercase">
-                  Search results
-                </h3>
-                <p className="text-sm text-stone-500">
-                  {isSearchPending
-                    ? "Searching..."
-                    : `${searchResults.length} results`}
-                </p>
-              </div>
-
-              {!isSearchPending && searchResults.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-stone-950/60 p-5 text-stone-400">
+            <div className="mb-5">
+              {isSearchPending ? (
+                <div className="space-y-1 py-2">
+                  {[1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 rounded-xl px-2 py-3"
+                    >
+                      <div className="h-[54px] w-[36px] shrink-0 animate-pulse rounded-md bg-white/10" />
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <div className="h-3.5 w-2/3 animate-pulse rounded bg-white/10" />
+                        <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : mediaSearchQuery.error ? (
+                <div className="rounded-xl bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+                  {mediaSearchQuery.error.message}
+                </div>
+              ) : searchResults.length === 0 ? (
+                <div className="px-2 py-4 text-center text-sm text-stone-500">
                   {getNoResultsLabel(mediaType)}
                 </div>
-              ) : null}
+              ) : (
+                <div className="divide-y divide-white/[0.06]">
+                  {searchResults.map((result, index) => {
+                    const alreadyAdded = existingTmdbIds.has(result.tmdbId);
 
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {searchResults.map((result) => {
-                  const alreadyAdded = existingTmdbIds.has(result.tmdbId);
+                    return (
+                      <div
+                        key={result.tmdbId}
+                        className={`grid grid-cols-[36px_1fr_auto] items-center gap-3 rounded-xl px-2 py-3 transition ${
+                          index === activeSuggestionIndex
+                            ? "bg-white/[0.07]"
+                            : ""
+                        }`}
+                      >
+                        <TmdbPoster
+                          title={result.title}
+                          posterPath={result.posterPath}
+                          backdropPath={result.backdropPath}
+                          size="thumb"
+                          className="aspect-[2/3] rounded-md"
+                        />
 
-                  return (
-                    <div
-                      key={result.tmdbId}
-                      className="overflow-hidden rounded-2xl border border-white/10 bg-stone-950/80"
-                    >
-                      <TmdbPoster
-                        title={result.title}
-                        posterPath={result.posterPath}
-                        backdropPath={result.backdropPath}
-                        className="aspect-[2/3] rounded-none"
-                      />
-
-                      <div className="space-y-4 p-4">
-                        <div className="space-y-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="text-lg font-semibold text-white">
-                              {result.title}
-                            </h3>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-white">
+                            {result.title}
                             {result.year ? (
-                              <span className="text-sm text-stone-500">
+                              <span className="ml-1.5 font-normal text-stone-500">
                                 {result.year}
                               </span>
                             ) : null}
-                          </div>
+                          </p>
                           <CreditLine
                             creditNames={result.creditNames}
                             mediaType={mediaType}
-                            className="text-sm text-stone-300"
+                            className="truncate text-xs text-stone-400"
                           />
                         </div>
-
-                        <p className="min-h-24 text-sm text-stone-400">
-                          {result.overview || "No overview available."}
-                        </p>
 
                         <button
                           type="button"
@@ -759,23 +708,51 @@ export function WatchlistDetailClient({
                             })
                           }
                           disabled={alreadyAdded || addItem.isPending}
-                          className={`w-full rounded-full px-4 py-3 text-sm font-medium transition ${
+                          aria-label={
                             alreadyAdded
-                              ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-100"
-                              : "bg-white text-stone-900 hover:bg-stone-200"
-                          } disabled:cursor-not-allowed disabled:opacity-70`}
+                              ? `${result.title} already added`
+                              : `Add ${result.title}`
+                          }
+                          className={`flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition disabled:cursor-not-allowed ${
+                            alreadyAdded
+                              ? "text-emerald-400"
+                              : "border border-white/15 text-white hover:border-white/30 hover:bg-white/5"
+                          }`}
                         >
-                          {alreadyAdded
-                            ? "Already on this list"
-                            : addItem.isPending
-                              ? "Adding..."
-                              : "Add to queue"}
+                          {alreadyAdded ? (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M20 6 9 17l-5-5" />
+                            </svg>
+                          ) : (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M12 5v14" />
+                              <path d="M5 12h14" />
+                            </svg>
+                          )}
                         </button>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ) : null}
 
