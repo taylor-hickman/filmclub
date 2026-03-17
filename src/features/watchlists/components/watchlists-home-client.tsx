@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { TmdbBackdrop, TmdbPoster } from "~/app/_components/tmdb-media";
+import { TmdbPoster } from "~/app/_components/tmdb-media";
 import {
   getWatchlistBadgeLabel,
   getWatchlistTypeLabel,
@@ -182,74 +182,65 @@ export function WatchlistsHomeClient() {
           ) : null}
 
           <div className="grid gap-4 sm:gap-5">
-            {watchlistsQuery.data?.map((watchlist) => {
-              const leadPreview =
-                watchlist.previewItems.find((item) => item.backdropPath) ??
-                watchlist.previewItems[0];
-
-              return (
-                <Link
-                  key={watchlist.id}
-                  href={`/app/watchlists/${watchlist.id}`}
-                  className="block overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] transition hover:border-white/10 sm:rounded-[2rem]"
-                >
-                  <TmdbBackdrop
-                    title={watchlist.name}
-                    backdropPath={leadPreview?.backdropPath ?? null}
-                    posterPath={leadPreview?.posterPath ?? null}
-                    className="min-h-[14rem] sm:min-h-[19rem]"
-                  >
-                    <div className="flex h-full flex-col justify-between gap-4 p-4 sm:gap-6 sm:p-6">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-0.5 text-xs text-stone-200">
-                          {getWatchlistBadgeLabel(watchlist.mediaType)}
-                        </span>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <h3 className="text-xl font-semibold text-white sm:text-2xl">
-                          {watchlist.name}
-                        </h3>
-                        <p className="text-xs text-stone-400 sm:text-sm">
-                          {watchlist.itemCount}{" "}
-                          {watchlist.itemCount === 1 ? "title" : "titles"} ·{" "}
-                          {watchlist.memberCount}{" "}
-                          {watchlist.memberCount === 1 ? "member" : "members"}
-                        </p>
-                        {watchlist.description ? (
-                          <p className="line-clamp-2 text-sm text-stone-200">
-                            {watchlist.description}
-                          </p>
-                        ) : null}
-
-                        {watchlist.previewItems.length > 0 ? (
-                          <div className="flex gap-2 overflow-x-auto pt-2 sm:gap-3 sm:pt-3">
-                            {watchlist.previewItems.map((item) => (
-                              <div
-                                key={`${watchlist.id}-${item.tmdbId}`}
-                                className="w-[56px] shrink-0 sm:w-[72px]"
-                              >
-                                <TmdbPoster
-                                  title={item.title}
-                                  posterPath={item.posterPath}
-                                  backdropPath={item.backdropPath}
-                                  size="thumb"
-                                  className="aspect-[2/3] rounded-lg border border-white/10 sm:rounded-[1rem]"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="pt-2 text-sm text-stone-500">
-                            No titles yet.
-                          </p>
-                        )}
-                      </div>
+            {watchlistsQuery.data?.map((watchlist) => (
+              <Link
+                key={watchlist.id}
+                href={`/app/watchlists/${watchlist.id}`}
+                className="group rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4 transition hover:border-white/10 sm:rounded-3xl sm:p-5"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] tracking-wide text-stone-300 uppercase sm:text-xs">
+                        {getWatchlistBadgeLabel(watchlist.mediaType)}
+                      </span>
+                      <span className="text-xs text-stone-500">
+                        {watchlist.itemCount}{" "}
+                        {watchlist.itemCount === 1 ? "title" : "titles"} ·{" "}
+                        {watchlist.memberCount}{" "}
+                        {watchlist.memberCount === 1 ? "member" : "members"}
+                      </span>
                     </div>
-                  </TmdbBackdrop>
-                </Link>
-              );
-            })}
+
+                    <h3 className="font-display text-xl italic text-white sm:text-2xl">
+                      {watchlist.name}
+                    </h3>
+                    {watchlist.description ? (
+                      <p className="line-clamp-2 text-sm leading-relaxed text-stone-400">
+                        {watchlist.description}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <span className="mt-1 shrink-0 text-sm text-stone-500 transition group-hover:text-white">
+                    →
+                  </span>
+                </div>
+
+                {watchlist.previewItems.length > 0 ? (
+                  <div className="mt-3 flex gap-2 overflow-x-auto sm:mt-4 sm:gap-3">
+                    {watchlist.previewItems.map((item) => (
+                      <div
+                        key={`${watchlist.id}-${item.tmdbId}`}
+                        className="w-[48px] shrink-0 sm:w-[64px]"
+                      >
+                        <TmdbPoster
+                          title={item.title}
+                          posterPath={item.posterPath}
+                          backdropPath={item.backdropPath}
+                          size="thumb"
+                          className="aspect-[2/3] rounded-md border border-white/10 sm:rounded-lg"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-sm text-stone-500">
+                    No titles yet.
+                  </p>
+                )}
+              </Link>
+            ))}
           </div>
         </>
       )}
