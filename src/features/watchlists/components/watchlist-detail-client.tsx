@@ -53,6 +53,7 @@ export function WatchlistDetailClient({
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+  const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
   const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
   const [openPanel, setOpenPanel] = useState<
     "settings" | "collaborators" | null
@@ -924,16 +925,29 @@ export function WatchlistDetailClient({
                               {feedbackMap[`watched-${item.id}`]}
                             </span>
                           ) : null}
-                          <button
-                            type="button"
-                            onClick={() =>
-                              removeItem.mutate({ itemId: item.id })
-                            }
-                            aria-label="Remove"
-                            className="rounded-full border border-rose-400/20 p-1.5 text-rose-300 transition hover:border-rose-300/40 hover:text-rose-200"
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                          </button>
+                          {confirmRemove === item.id ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                removeItem.mutate({ itemId: item.id });
+                                setConfirmRemove(null);
+                              }}
+                              onBlur={() => setConfirmRemove(null)}
+                              autoFocus
+                              className="rounded-full border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-300 transition hover:bg-rose-500/20"
+                            >
+                              Remove?
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setConfirmRemove(item.id)}
+                              aria-label="Remove"
+                              className="rounded-full border border-rose-400/20 p-1.5 text-rose-300 transition hover:border-rose-300/40 hover:text-rose-200"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            </button>
+                          )}
                         </div>
                       </div>
 
