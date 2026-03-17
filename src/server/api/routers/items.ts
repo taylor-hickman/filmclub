@@ -170,62 +170,57 @@ export const itemsRouter = createTRPCRouter({
       return { success: true };
     }),
 
-  reorder: protectedProcedure
+  setWeight: protectedProcedure
     .input(
       z.object({
-        watchlistId: watchlistIdSchema,
-        itemIds: z.array(z.string().cuid()),
+        itemId: z.string().cuid(),
+        weight: z.number().int().min(1).max(5).nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await requireWatchlistMembership(
-        ctx.db,
-        ctx.session.user.id,
-        input.watchlistId,
-      );
-
-      const items = await ctx.db.watchlistItem.findMany({
+      const item = await ctx.db.watchlistItem.findUniqueOrThrow({
         where: {
-          watchlistId: input.watchlistId,
+          id: input.itemId,
         },
         select: {
           id: true,
+          watchlistId: true,
         },
       });
 
-      if (items.length !== input.itemIds.length) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message:
-            "The reorder payload does not match the current watchlist items.",
-        });
-      }
-
-      const currentIds = new Set(items.map((item) => item.id));
-      const nextIds = new Set(input.itemIds);
-
-      if (
-        currentIds.size !== nextIds.size ||
-        [...currentIds].some((id) => !nextIds.has(id))
-      ) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "The reorder payload contains invalid item ids.",
-        });
-      }
-
-      await ctx.db.$transaction(
-        input.itemIds.map((itemId, index) =>
-          ctx.db.watchlistItem.update({
-            where: {
-              id: itemId,
-            },
-            data: {
-              position: index,
-            },
-          }),
-        ),
+      await requireWatchlistMembership(
+        ctx.db,
+        ctx.session.user.id,
+        item.watchlistId,
       );
+
+      if (input.weight === null) {
+        await ctx.db.watchlistItemWeight.deleteMany({
+          where: {
+            watchlistItemId: item.id,
+            userId: ctx.session.user.id,
+          },
+        });
+
+        return { success: true };
+      }
+
+      await ctx.db.watchlistItemWeight.upsert({
+        where: {
+          watchlistItemId_userId: {
+            watchlistItemId: item.id,
+            userId: ctx.session.user.id,
+          },
+        },
+        create: {
+          watchlistItemId: item.id,
+          userId: ctx.session.user.id,
+          weight: input.weight,
+        },
+        update: {
+          weight: input.weight,
+        },
+      });
 
       return { success: true };
     }),

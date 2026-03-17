@@ -212,13 +212,24 @@ export const membersRouter = createTRPCRouter({
         });
       }
 
-      await ctx.db.featureMembership.delete({
-        where: {
-          featureInstanceId_userId: {
-            featureInstanceId: access.watchlist.featureInstanceId,
+      await ctx.db.$transaction(async (tx) => {
+        await tx.watchlistItemWeight.deleteMany({
+          where: {
             userId: input.userId,
+            watchlistItem: {
+              watchlistId: input.watchlistId,
+            },
           },
-        },
+        });
+
+        await tx.featureMembership.delete({
+          where: {
+            featureInstanceId_userId: {
+              featureInstanceId: access.watchlist.featureInstanceId,
+              userId: input.userId,
+            },
+          },
+        });
       });
 
       return { success: true };

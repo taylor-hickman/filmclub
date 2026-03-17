@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { watchlistMediaTypes } from "~/features/watchlists/lib/watchlist-media";
+import { prioritizeWatchlistItems } from "~/features/watchlists/server/item-priority";
 import {
   requireWatchlistMembership,
   requireWatchlistOwner,
@@ -56,15 +57,19 @@ export const watchlistsRouter = createTRPCRouter({
           },
         },
         items: {
-          orderBy: {
-            position: "asc",
-          },
-          take: 3,
           select: {
+            position: true,
+            status: true,
             tmdbId: true,
             title: true,
             posterPath: true,
             backdropPath: true,
+            weights: {
+              select: {
+                userId: true,
+                weight: true,
+              },
+            },
           },
         },
       },
@@ -73,19 +78,33 @@ export const watchlistsRouter = createTRPCRouter({
       },
     });
 
-    return watchlists.map((watchlist) => ({
-      id: watchlist.id,
-      name: watchlist.name,
-      description: watchlist.description,
-      mediaType: watchlist.mediaType,
-      createdAt: watchlist.createdAt,
-      updatedAt: watchlist.updatedAt,
-      owner: watchlist.featureInstance.owner,
-      viewerRole: watchlist.featureInstance.memberships[0]?.role ?? "MEMBER",
-      itemCount: watchlist._count.items,
-      memberCount: watchlist.featureInstance._count.memberships,
-      previewItems: watchlist.items,
-    }));
+    return watchlists.map((watchlist) => {
+      const previewItems = prioritizeWatchlistItems(
+        watchlist.items,
+        ctx.session.user.id,
+      )
+        .slice(0, 3)
+        .map(({ tmdbId, title, posterPath, backdropPath }) => ({
+          tmdbId,
+          title,
+          posterPath,
+          backdropPath,
+        }));
+
+      return {
+        id: watchlist.id,
+        name: watchlist.name,
+        description: watchlist.description,
+        mediaType: watchlist.mediaType,
+        createdAt: watchlist.createdAt,
+        updatedAt: watchlist.updatedAt,
+        owner: watchlist.featureInstance.owner,
+        viewerRole: watchlist.featureInstance.memberships[0]?.role ?? "MEMBER",
+        itemCount: watchlist._count.items,
+        memberCount: watchlist.featureInstance._count.memberships,
+        previewItems,
+      };
+    });
   }),
 
   get: protectedProcedure
@@ -145,9 +164,6 @@ export const watchlistsRouter = createTRPCRouter({
             },
           },
           items: {
-            orderBy: {
-              position: "asc",
-            },
             include: {
               addedBy: {
                 select: {
@@ -156,10 +172,21 @@ export const watchlistsRouter = createTRPCRouter({
                   email: true,
                 },
               },
+              weights: {
+                select: {
+                  userId: true,
+                  weight: true,
+                },
+              },
             },
           },
         },
       });
+
+      const items = prioritizeWatchlistItems(
+        watchlist.items,
+        ctx.session.user.id,
+      );
 
       return {
         id: watchlist.id,
@@ -171,7 +198,7 @@ export const watchlistsRouter = createTRPCRouter({
         owner: watchlist.featureInstance.owner,
         members: watchlist.featureInstance.memberships,
         invites: watchlist.featureInstance.invites,
-        items: watchlist.items,
+        items,
         viewerRole: membership.role,
         canManage: membership.role === "OWNER",
       };

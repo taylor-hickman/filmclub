@@ -32,9 +32,7 @@ export function FeatureHubClient() {
           className="group rounded-3xl border border-white/[0.06] bg-white/[0.03] p-6 transition hover:border-white/10"
         >
           <div className="space-y-3">
-            <h2 className="font-display text-4xl text-white">
-              {feature.name}
-            </h2>
+            <h2 className="font-display text-4xl text-white">{feature.name}</h2>
             <p className="max-w-2xl text-sm leading-7 text-stone-400">
               {feature.detail}
             </p>

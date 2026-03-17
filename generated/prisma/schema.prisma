@@ -56,18 +56,19 @@ model Session {
 }
 
 model User {
-  id                    String              @id @default(cuid())
+  id                    String                @id @default(cuid())
   name                  String?
-  email                 String?             @unique
+  email                 String?               @unique
   emailVerified         DateTime?
   image                 String?
   accounts              Account[]
-  featureInvites        FeatureInvite[]     @relation("FeatureInviteInviter")
+  featureInvites        FeatureInvite[]       @relation("FeatureInviteInviter")
   featureMemberships    FeatureMembership[]
-  ownedFeatureInstances FeatureInstance[]   @relation("FeatureInstanceOwner")
+  ownedFeatureInstances FeatureInstance[]     @relation("FeatureInstanceOwner")
   sessions              Session[]
   userFeatures          UserFeature[]
-  watchlistItems        WatchlistItem[]     @relation("WatchlistItemAddedBy")
+  watchlistItems        WatchlistItem[]       @relation("WatchlistItemAddedBy")
+  watchlistItemWeights  WatchlistItemWeight[]
 }
 
 model VerificationToken {
@@ -153,12 +154,12 @@ model Watchlist {
 }
 
 model WatchlistItem {
-  id           String              @id @default(cuid())
+  id           String                @id @default(cuid())
   watchlistId  String
   tmdbId       Int
   position     Int
-  status       WatchlistItemStatus @default(QUEUED)
-  note         String              @default("")
+  status       WatchlistItemStatus   @default(QUEUED)
+  note         String                @default("")
   title        String
   creditNames  String?
   year         Int?
@@ -167,12 +168,28 @@ model WatchlistItem {
   overview     String?
   watchedAt    DateTime?
   addedById    String
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  addedBy      User                @relation("WatchlistItemAddedBy", fields: [addedById], references: [id], onDelete: Restrict)
-  watchlist    Watchlist           @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  addedBy      User                  @relation("WatchlistItemAddedBy", fields: [addedById], references: [id], onDelete: Restrict)
+  watchlist    Watchlist             @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+  weights      WatchlistItemWeight[]
 
   @@unique([watchlistId, tmdbId])
   @@index([watchlistId, position])
   @@index([addedById])
+}
+
+model WatchlistItemWeight {
+  id              String        @id @default(cuid())
+  watchlistItemId String
+  userId          String
+  weight          Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  watchlistItem   WatchlistItem @relation(fields: [watchlistItemId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistItemId, userId])
+  @@index([watchlistItemId])
+  @@index([userId])
 }
